@@ -1,0 +1,217 @@
+@charset "UTF-8";
+
+.num-box{
+    width: 300px;
+    height: 400px;
+}
+.max-box{
+    width: 300px;
+    height: 30px;
+}
+
+.menu_btn li a:hover, .number_btn li a:hover, .mode_btn li a:hover, .max_btn li a:hover, .dm_menu li a:hover, .dm_head li a:hover
+{
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-moz-transition: opacity 1s ease-out;
+	transition: opacity 1s ease-out;
+}
+
+.menu_btn { overflow: auto; /*height: 740px;*/}
+.number_btn, .mode_btn, .max_btn, .dm_menu, .dm_head { overflow: auto; /*height: 740px;*/}
+.menu_btn, .number_btn, .mode_btn, .max_btn, .dm_menu, .dm_head { display: flex; justify-content: flex-start; align-content: flex-start; flex-wrap: wrap; margin-left: -10px;}
+.menu_btn li,.number_btn li, .mode_btn li, .max_btn li, .dm_menu li, .dm_head li { margin: 0 10px 10px; list-style: none;}
+.menu_btn li a,.number_btn li a, .mode_btn li a, .max_btn li a, .dm_menu li a, .dm_head li a
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    background: #33323a;
+    border-radius: 12px;
+    text-decoration: none;
+}
+
+.menu_btn li a {
+    width: 160px;
+    height: 140px;
+}
+.number_btn li a {
+    width: 60px;
+    height: 60px;
+}
+.mode_btn li a {
+    width: 120px;
+    height: 60px;
+}
+.max_btn li a {
+    width: 50px;
+    height: 50px;
+}
+.dm_menu li a {
+    width: 120px;
+    height: 120px;
+}
+.dm_head li a {
+    width: 100px;
+    height: 140px;
+}
+
+.detail-h3-color {
+    color:#0521c0;
+}
+
+.myshift-h3-color {
+    color:#213fe9;
+}
+
+.menu_btn li a div ,.number_btn li a div ,.mode_btn li a div ,.max_btn li a div { display: inline-block;}
+.menu_btn li a p ,.number_btn li a p ,.mode_btn li a p ,.max_btn li a p { font-size: 1.4rem;}
+.menu_btn li a span ,.number_btn li a span ,.mode_btn li a span ,.max_btn li a span { display: block; font-size: 1.2rem; line-height: 1.2em;}
+.menu_btn li a span:nth-child(2) ,.number_btn li a span:nth-child(2) ,.mode_btn li a span:nth-child(2) ,.max_btn li a span:nth-child(2) { padding-top: 10px;}
+.menu_btn li a.btn_col01 ,.number_btn li a.btn_col01 ,.mode_btn li a.btn_col01 ,.max_btn li a.btn_col01 { background: #efa723 !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col02 ,.number_btn li a.btn_col02 ,.mode_btn li a.btn_col02 ,.max_btn li a.btn_col02 { background: #29aecd !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col03 ,.number_btn li a.btn_col03 ,.mode_btn li a.btn_col03 ,.max_btn li a.btn_col03 { background: #f56cc0 !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col04 ,.number_btn li a.btn_col04 ,.mode_btn li a.btn_col04 ,.max_btn li a.btn_col04 { background: #9acd32 !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col05 ,.number_btn li a.btn_col05 ,.mode_btn li a.btn_col05 ,.max_btn li a.btn_col05 { background: #6a5acd !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col_f ,.number_btn li a.btn_col_f ,.mode_btn li a.btn_col_f ,.max_btn li a.btn_col_f { background: #ee82ee !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col_m ,.number_btn li a.btn_col_m ,.mode_btn li a.btn_col_m ,.max_btn li a.btn_col_m { background: #87cefa !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_max10 ,.number_btn li a.btn_max10 ,.mode_btn li a.btn_max10 ,.max_btn li a.btn_max10 { background: #008000 !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_max86 ,.number_btn li a.btn_max86 ,.mode_btn li a.btn_max86 ,.max_btn li a.btn_max86 { background: #FF8C00 !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_max04 ,.number_btn li a.btn_max04 ,.mode_btn li a.btn_max04 ,.max_btn li a.btn_max04 { background: #CC0000 !important; box-shadow: 8px 8px 8px grey;}
+.menu_btn li a.btn_col99 ,.number_btn li a.btn_col99 ,.mode_btn li a.btn_col99 ,.max_btn li a.btn_col99 { background: #8b8989 !important; box-shadow: 8px 8px 8px grey;}
+
+.dm_menu li a.btn_dm { background: #2435ff !important; box-shadow: 8px 8px 8px grey;}
+.dm_menu li a.btn_dm25 { background: #29aecd !important; box-shadow: 8px 8px 8px grey;}
+.dm_menu li a div { display: inline-block;}
+.dm_menu li a p { font-size: 4.0rem;}
+.dm_menu li a span { display: block; font-size: 4.0rem; line-height: 1.2em;}
+.dm_head li a.btn_dm_head { background: #2435ff !important; box-shadow: 8px 8px 8px grey;}
+.dm_head li a div { display: inline-block;}
+.dm_head li a p { font-size: 4.0rem;}
+.dm_head li a span { display: block; font-size: 1.0rem; line-height: 1.2em;}
+
+
+.mt30 { margin-top: 30px;}
+
+.judge_font { font-size: 1.2rem; text-align: center;}
+.footer-font {font-size: 1.2rem;}
+.footer-hd-font {font-size: 0.8rem;}
+.level-font {
+    font-size: 1.2rem;
+}
+.message-font {font-size: 1.4rem; color:blue;}
+.text-info {}
+
+html, body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    height: 100vh;
+    margin: 0;
+}
+
+.full-height {
+/*                height: 100vh;*/
+}
+
+.flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.position-ref {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.content {
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+}
+
+.links > a {
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.m-b-md {
+    margin-bottom: 30px;
+}
+
+.common-btn {
+    width: 160px;
+    height: 50px;
+    /* 上 | 右 | 下 | 左 */
+    margin: 40px 20px 60px 20px;
+}
+.btn-font {
+    font-size: 1.2rem;
+    width: 70px;
+}
+.btn-group-font{
+    width: 80px;
+}
+
+.dm-title-font-blue {
+    color:blue;
+    font-size: 2.0rem;
+}
+
+.dm-title-font-red {
+    color:red;
+    font-size: 2.0rem;
+}
+.bigfont-blue {
+    color:blue;
+    font-size: 10.0rem;
+}
+
+.bigfont-black {
+    color:black;
+    font-size: 8.0rem;
+}
+
+.bigfont-red {
+    color:red;
+    font-size: 10.0rem;
+}
+.bigfont-redhead {
+    color:red;
+    font-size: 10.0rem;
+}
+
+.dm-title-font-l {
+    font-size: 2.0rem;
+}
+
+.dm-title-font-m {
+    font-size: 1.5rem;
+}
+
+.dm-red-font-m {
+    font-size: 1.5rem;
+    color:red;
+}
+
+.dm-blue-font-m {
+    font-size: 1.5rem;
+    color:blue;
+}
