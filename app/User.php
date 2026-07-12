@@ -42,4 +42,41 @@ class User extends Authenticatable
         return $this->hasMany(Shift::class);
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // ユーザー削除時に紐づく体調データを自動で削除する
+        static::deleting(function ($user) {
+            // ユーザー削除時に連動して削除を実行
+            $user->userDetail()->delete();
+            $user->dailyConditions()->delete();
+        });
+    }
+
+    // リレーション定義
+    /**
+     * UserDetailモデルとのリレーション（1対1）
+     */
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
+
+    /**
+     * DailyConditionモデルとのリレーション（1対多）
+     */
+    public function dailyConditions()
+    {
+        return $this->hasMany(DailyCondition::class);
+    }
+
+    /**
+     * ⬇️ ここに正しく入っているか確認（なければ追記して保存）
+     */
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
+    }
+
 }

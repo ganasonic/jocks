@@ -47,3 +47,29 @@ Route::get('/dormitorymeal', 'ShiftController@dormitorymeal')->name('dormitoryme
 Route::get('/dormitorystay', 'ShiftController@dormitorystay')->name('dormitorystay');
 //送迎確認
 Route::get('/pickupbus', 'ShiftController@pickupbus')->name('pickupbus');
+
+// 体調管理機能のルーティング
+Route::prefix('daily-conditions')->name('daily_conditions.')->group(function () {
+    Route::get('/list', 'DailyConditionController@indexlist')->name('indexlist'); // 一覧画面
+    Route::get('/', 'DailyConditionController@index')->name('index'); // 一覧画面
+    Route::get('/create', 'DailyConditionController@create')->name('create'); // 入力画面
+    Route::post('/', 'DailyConditionController@store')->name('store'); // 保存処理
+
+    // ⬇️ この2行を追記
+    Route::get('/{date}/edit', 'DailyConditionController@edit')->name('edit');     // 編集画面
+    Route::patch('/{date}', 'DailyConditionController@update')->name('update');    // 更新処理
+});
+// プロフィール機能のルーティング
+Route::prefix('profile')->name('profile.')->group(function () {
+    Route::get('/', 'UserDetailController@show')->name('show');     // プロフィール表示・編集画面
+    Route::post('/', 'UserDetailController@update')->name('update'); // 保存・更新処理
+});
+
+// 目標管理（PDCA）機能のルーティング
+Route::prefix('goals')->name('goals.')->group(function () {
+    Route::get('/', 'GoalController@index')->name('index');          // 一覧
+    Route::get('/create', 'GoalController@create')->name('create');    // 新規作成
+    Route::post('/', 'GoalController@store')->name('store');          // 保存
+    Route::get('/{goal}/edit', 'GoalController@edit')->name('edit');  // 振り返り・編集
+    Route::patch('/{goal}', 'GoalController@update')->name('update'); // 更新
+});
