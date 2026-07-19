@@ -31,15 +31,15 @@
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
                     <div class="d-flex align-items-center gap-2">
-                        <a href="{{ route('daily_conditions.index', ['year' => $prevMonth->year, 'month' => $prevMonth->month]) }}" class="btn btn-outline-secondary btn-sm">
+                        <a href="{{ route('conditions.index', ['year' => $prevMonth->year, 'month' => $prevMonth->month]) }}" class="btn btn-outline-secondary btn-sm">
                             &lt; 前月
                         </a>
                         <h3 class="mb-0 mx-3 fw-bold">{{ $year }}年 {{ $month }}月</h3>
-                        <a href="{{ route('daily_conditions.index', ['year' => $nextMonth->year, 'month' => $nextMonth->month]) }}" class="btn btn-outline-secondary btn-sm">
+                        <a href="{{ route('conditions.index', ['year' => $nextMonth->year, 'month' => $nextMonth->month]) }}" class="btn btn-outline-secondary btn-sm">
                             次月 &gt;
                         </a>
                     </div>
-                    <a href="{{ route('daily_conditions.create') }}" class="btn btn-primary">
+                    <a href="{{ route('conditions.create') }}" class="btn btn-primary">
                         体調を記録する
                     </a>
                 </div>
@@ -71,7 +71,7 @@
                                                 @if($dayData['data'])
                                                     {{-- ⬇️ ここに編集画面へのリンクを追記（右上に小さく配置する例） --}}
                                                     <div class="position-absolute" style="top: 5px; right: 5px;">
-                                                        <a href="{{ route('daily_conditions.edit', ['date' => $dayData['date']]) }}" class="text-decoration-none btn btn-link p-0 text-muted" style="font-size: 0.75rem;" title="編集">✏️</a>
+                                                        <a href="{{ route('conditions.edit', ['date' => $dayData['date']]) }}" class="text-decoration-none btn btn-link p-0 text-muted" style="font-size: 0.75rem;" title="編集">✏️</a>
                                                     </div>
 
                                                     <div class="d-flex flex-column gap-1">
@@ -101,7 +101,7 @@
                                                     </div>
                                                 @else
                                                     <div class="text-center mt-3">
-                                                        <a href="{{ route('daily_conditions.create', ['date' => $dayData['date']]) }}" class="text-decoration-none text-muted opacity-25" style="font-size: 0.8rem;">+</a>
+                                                        <a href="{{ route('conditions.create', ['date' => $dayData['date']]) }}" class="text-decoration-none text-muted opacity-25" style="font-size: 0.8rem;">+</a>
                                                     </div>
                                                 @endif
                                             </td>

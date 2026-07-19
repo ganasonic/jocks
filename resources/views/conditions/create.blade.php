@@ -19,7 +19,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('daily_conditions.store') }}" method="POST">
+                    <form action="{{ route('conditions.store') }}" method="POST">
                         @csrf
 
                         {{-- 日付 --}}

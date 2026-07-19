@@ -24,7 +24,7 @@ class DailyConditionController extends Controller
         // ログイン中のユーザーの体調データを、日付が新しい順に取得
         $conditions = Auth::user()->dailyConditions()->orderBy('date', 'desc')->get();
 
-        return view('daily_conditions.index', compact('conditions'));
+        return view('conditions.index', compact('conditions'));
     }
 
     /**
@@ -88,7 +88,7 @@ class DailyConditionController extends Controller
         $graphTemperatures = $graphData->pluck('body_temperature')->toArray(); // Y軸1：体温
         $graphConditions = $graphData->pluck('condition_level')->toArray(); // Y軸2：体調
 
-        return view('daily_conditions.index', compact(
+        return view('conditions.index', compact(
             'calendarWeeks', 'year', 'month', 'prevMonth', 'nextMonth',
             'graphLabels', 'graphTemperatures', 'graphConditions'
         ));
@@ -99,7 +99,7 @@ class DailyConditionController extends Controller
      */
     public function create()
     {
-        return view('daily_conditions.create');
+        return view('conditions.create');
     }
 
     /**
@@ -121,7 +121,7 @@ class DailyConditionController extends Controller
         // ログインユーザーのデータとして保存
         Auth::user()->dailyConditions()->create($validated);
 
-        return redirect()->route('daily_conditions.index')
+        return redirect()->route('conditions.index')
             ->with('status', '本日の体調を記録しました！');
     }
 
@@ -133,7 +133,7 @@ class DailyConditionController extends Controller
         // 指定された日付のデータを取得（なければ404エラー）
         $condition = Auth::user()->dailyConditions()->where('date', $date)->firstOrFail();
 
-        return view('daily_conditions.edit', compact('condition'));
+        return view('conditions.edit', compact('condition'));
     }
 
     /**
@@ -157,7 +157,7 @@ class DailyConditionController extends Controller
         // データの更新
         $condition->update($validated);
 
-        return redirect()->route('daily_conditions.index')
+        return redirect()->route('conditions.index')
             ->with('status', $date . ' の体調記録を更新しました！');
     }
 }

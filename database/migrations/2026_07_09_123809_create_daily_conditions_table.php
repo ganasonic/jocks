@@ -13,7 +13,7 @@ class CreateDailyConditionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('daily_conditions', function (Blueprint $table) {
+        Schema::create('conditions', function (Blueprint $table) {
             $table->bigIncrements('id');
 
 // 【修正後】単なる bigInteger のカラム定義のみにします（外部キー制約は設定しない）
@@ -40,6 +40,6 @@ class CreateDailyConditionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daily_conditions');
+        Schema::dropIfExists('conditions');
     }
 }

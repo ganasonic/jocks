@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span class="h5 mb-0">体調記録履歴</span>
-                    <a href="{{ route('daily_conditions.create') }}" class="btn btn-sm btn-primary">新しい体調を記録</a>
+                    <a href="{{ route('conditions.create') }}" class="btn btn-sm btn-primary">新しい体調を記録</a>
                 </div>
 
                 <div class="card-body">

@@ -22,7 +22,7 @@
                     @endif
 
                     {{-- 送信先をPATCHメソッドに指定 --}}
-                    <form action="{{ route('daily_conditions.update', ['date' => $condition->date]) }}" method="POST">
+                    <form action="{{ route('conditions.update', ['date' => $condition->date]) }}" method="POST">
                         @csrf
                         @method('PATCH')
 
@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <a href="{{ route('daily_conditions.index') }}" class="btn btn-outline-secondary w-50">キャンセル</a>
+                            <a href="{{ route('conditions.index') }}" class="btn btn-outline-secondary w-50">キャンセル</a>
                             <button type="submit" class="btn btn-success w-50">更新する</button>
                         </div>
                     </form>

@@ -49,7 +49,7 @@ Route::get('/dormitorystay', 'ShiftController@dormitorystay')->name('dormitoryst
 Route::get('/pickupbus', 'ShiftController@pickupbus')->name('pickupbus');
 
 // 体調管理機能のルーティング
-Route::prefix('daily-conditions')->name('daily_conditions.')->group(function () {
+Route::prefix('conditions')->name('conditions.')->group(function () {
     Route::get('/list', 'DailyConditionController@indexlist')->name('indexlist'); // 一覧画面
     Route::get('/', 'DailyConditionController@index')->name('index'); // 一覧画面
     Route::get('/create', 'DailyConditionController@create')->name('create'); // 入力画面
@@ -72,4 +72,11 @@ Route::prefix('goals')->name('goals.')->group(function () {
     Route::post('/', 'GoalController@store')->name('store');          // 保存
     Route::get('/{goal}/edit', 'GoalController@edit')->name('edit');  // 振り返り・編集
     Route::patch('/{goal}', 'GoalController@update')->name('update'); // 更新
+});
+
+// トレーニング管理機能のルーティング
+Route::prefix('trainings')->name('trainings.')->group(function () {
+    Route::get('/', 'TrainingController@index')->name('index');        // 一覧
+    Route::get('/create', 'TrainingController@create')->name('create'); // 作成
+    Route::post('/', 'TrainingController@store')->name('store');        // 保存
 });
