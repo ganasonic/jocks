@@ -2,113 +2,69 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h4 mb-0 fw-bold">新規練習記録</h2>
-        <a href="{{ route('practices.index') }}" class="btn btn-outline-secondary">
-            キャンセル
-        </a>
-    </div>
+    <h2>トレーニング入力</h2>
 
-    <form action="{{ route('practices.store') }}" method="POST">
+    <!-- actionをroute関数に変更して404を確実に回避 -->
+    <form action="{{ route('trainings.store') }}" method="POST">
         @csrf
-
-        <div class="card shadow-sm border-light-subtle mb-4">
-            <div class="card-body p-4">
-                <div class="row g-3 mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">練習日 <span class="text-danger">*</span></label>
-                        <input type="date" name="practice_date" class="form-control" value="{{ old('practice_date', date('Y-m-d')) }}" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">種別・カテゴリ</label>
-                        <input type="text" name="practice_type" class="form-control" list="recent-types-list" placeholder="例: ウォータージャンプ" value="{{ old('practice_type') }}">
-                        <datalist id="recent-types-list">
-                            @foreach($recentTypes ?? [] as $type)
-                                <option value="{{ $type }}">
-                            @endforeach
-                        </datalist>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">場所</label>
-                        <input type="text" name="place" class="form-control" placeholder="例: S-Air" value="{{ old('place') }}">
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">目標</label>
-                    <textarea name="target" class="form-control" rows="2" placeholder="本日の目標を入力">{{ old('target') }}</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold text-success">全体アドバイス・総評（コーチ）</label>
-                    <textarea name="overall_coach_comment" class="form-control border-success-subtle bg-success-subtle" rows="3" placeholder="全体に対するアドバイスや総評を入力">{{ old('overall_coach_comment') }}</textarea>
-                </div>
-            </div>
+        <div class="form-group mb-4">
+            <label>日付</label>
+            <input type="date" name="training_date" class="form-control" value="{{ date('Y-m-d') }}" required>
         </div>
 
-        <h3 class="h5 fw-bold mb-3">練習メニュー</h3>
-        <div id="details-container">
-            <div class="card shadow-sm border-light-subtle mb-3 detail-item">
-                <div class="card-body p-3">
-                    <div class="row g-2 mb-2">
-                        <div class="col-md-4">
-                            <label class="form-label fs-7 fw-bold">メニュー名 <span class="text-danger">*</span></label>
-                            <input type="text" name="details[0][menu_name]" class="form-control form-control-sm" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label fs-7 fw-bold">本数/時間</label>
-                            <input type="text" name="details[0][runs_or_time]" class="form-control form-control-sm" placeholder="例: 5本">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fs-7 fw-bold">本人達成度</label>
-                            <select name="details[0][rating]" class="form-select form-select-sm">
-                                <option value="">選択なし</option>
-                                @for($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}">{{ $i }} ({{ str_repeat('★', $i) }})</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fs-7 fw-bold text-primary">コーチ達成度</label>
-                            <select name="details[0][coach_rating]" class="form-select form-select-sm border-primary">
-                                <option value="">選択なし</option>
-                                @for($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}">{{ $i }} ({{ str_repeat('★', $i) }})</option>
-                                @endfor
-                            </select>
-                        </div>
-                    </div>
+        <table class="table" id="training-table">
+            <thead>
+                <tr>
+                    <th>種目名</th>
+                    <th>重量(kg)</th>
+                    <th>回数</th>
+                    <th>セット数</th>
+                    <th>インターバル(秒)</th>
+                    <th>きつさ(RPE)</th>
+                </tr>
+            </thead>
+            <tbody id="details-body">
+                <tr>
+                    <td>
+                        <input type="text" name="details[0][exercise_name]" class="form-control" list="exercise-list">
+                    </td>
+                    <td><input type="number" name="details[0][weight]" class="form-control" step="0.5"></td>
+                    <td><input type="number" name="details[0][reps]" class="form-control"></td>
+                    <td><input type="number" name="details[0][sets]" class="form-control"></td>
+                    <td><input type="number" name="details[0][interval]" class="form-control"></td>
+                    <td><input type="number" name="details[0][rpe]" class="form-control" min="1" max="10" placeholder="1〜10"></td>
+                </tr>
+            </tbody>
+        </table>
 
-                    <div class="row g-2 mb-2">
-                        <div class="col-md-6">
-                            <label class="form-label fs-7">感触・自己評価</label>
-                            <textarea name="details[0][impression]" class="form-control form-control-sm" rows="2"></textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fs-7">課題・反省</label>
-                            <textarea name="details[0][notice]" class="form-control form-control-sm" rows="2"></textarea>
-                        </div>
-                    </div>
+        <!-- 過去の種目リスト（pluck形式の配列に合わせたループ修正） -->
+        <datalist id="exercise-list">
+            @foreach($recentExercises as $ex)
+                <option value="{{ $ex }}">
+            @endforeach
+        </datalist>
 
-                    <div class="row g-2">
-                        <div class="col-md-8">
-                            <label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label>
-                            <textarea name="details[0][coach_comment]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2" placeholder="このメニューに対する個別アドバイス"></textarea>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fs-7">動画URL</label>
-                            <input type="url" name="details[0][video_url]" class="form-control form-control-sm" placeholder="https://...">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="d-grid gap-2 mt-4">
-            <button type="submit" class="btn btn-primary btn-lg fw-bold">
-                保存する
-            </button>
+        <div class="mt-3">
+            <button type="button" class="btn btn-secondary" onclick="addRow()">行を追加</button>
+            <button type="submit" class="btn btn-primary">保存</button>
         </div>
     </form>
 </div>
+
+<script>
+    let rowCount = 1;
+    function addRow() {
+        let tbody = document.getElementById('details-body');
+        let tr = `<tr>
+            <td><input type="text" name="details[${rowCount}][exercise_name]" class="form-control" list="exercise-list"></td>
+            <td><input type="number" name="details[${rowCount}][weight]" class="form-control" step="0.5"></td>
+            <td><input type="number" name="details[${rowCount}][reps]" class="form-control"></td>
+            <td><input type="number" name="details[${rowCount}][sets]" class="form-control"></td>
+            <td><input type="number" name="details[${rowCount}][interval]" class="form-control"></td>
+            <td><input type="number" name="details[${rowCount}][rpe]" class="form-control" min="1" max="10" placeholder="1〜10"></td>
+        </tr>`;
+        tbody.insertAdjacentHTML('beforeend', tr);
+        rowCount++;
+    }
+</script>
 @endsection
