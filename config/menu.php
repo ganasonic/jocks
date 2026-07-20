@@ -63,7 +63,7 @@ return [
         'menu14' => [
             'name'      => '練習管理',
             'sub_name'  => 'スケジュール・日誌',
-            'url'       => '/practice',
+            'url'       => '/practices',
             'icon'      => 'fas fa-clipboard-list',
             'class'     => 'border-emerald-100 bg-emerald-50 text-emerald-600',
         ],

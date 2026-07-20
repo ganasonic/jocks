@@ -19,6 +19,7 @@ class CreateTrainingsTable extends Migration
             $table->date('training_date');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
+            $table->string('title')->nullable();
             $table->text('memo')->nullable();
             $table->timestamps();
        });

@@ -79,4 +79,24 @@ Route::prefix('trainings')->name('trainings.')->group(function () {
     Route::get('/', 'TrainingController@index')->name('index');        // 一覧
     Route::get('/create', 'TrainingController@create')->name('create'); // 作成
     Route::post('/', 'TrainingController@store')->name('store');        // 保存
+
+    // 編集と更新
+    Route::get('/{training}/edit', 'TrainingController@edit')->name('edit');  // 編集画面
+    Route::patch('/{training}', 'TrainingController@update')->name('update'); // 更新処理
+});
+
+// 練習管理機能のルーティング
+Route::prefix('practices')->name('practices.')->group(function () {
+    Route::get('/', 'PracticeController@index')->name('index');
+    Route::get('/create', 'PracticeController@create')->name('create');
+    Route::post('/', 'PracticeController@store')->name('store');
+
+    Route::get('/{practice}', 'PracticeController@show')->name('show');
+
+    Route::get('/{practice}/edit', 'PracticeController@edit')->name('edit');
+    Route::patch('/{practice}', 'PracticeController@update')->name('update');
+    Route::put('/{practice}', 'PracticeController@update')->name('update');
+
+    // 追加: 削除用ルート
+    Route::delete('/{practice}', 'PracticeController@destroy')->name('destroy');
 });
