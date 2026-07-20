@@ -70,7 +70,7 @@ return [
         'menu15' => [
             'name'      => '栄養管理',
             'sub_name'  => '栄養素・カロリー追跡',
-            'url'       => '/nutrition',
+            'url'       => '/nutritions',
             'icon'      => 'fas fa-apple-alt',
             'class'     => 'border-amber-100 bg-amber-50 text-amber-600',
         ],

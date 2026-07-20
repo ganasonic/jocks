@@ -100,3 +100,21 @@ Route::prefix('practices')->name('practices.')->group(function () {
     // 追加: 削除用ルート
     Route::delete('/{practice}', 'PracticeController@destroy')->name('destroy');
 });
+
+// 栄養管理機能のルーティング
+Route::prefix('nutritions')->name('nutritions.')->group(function () {
+    Route::get('/', 'NutritionController@index')->name('index');
+    Route::get('/create', 'NutritionController@create')->name('create');
+    Route::post('/', 'NutritionController@store')->name('store');
+    Route::get('/{nutrition}', 'NutritionController@show')->name('show');
+    Route::get('/{nutrition}/edit', 'NutritionController@edit')->name('edit');
+    Route::patch('/{nutrition}', 'NutritionController@update')->name('update');
+    Route::delete('/{nutrition}', 'NutritionController@destroy')->name('destroy');
+
+    // --- 追加分 ---
+    Route::get('/{nutrition}/details/create', 'NutritionController@createDetail')->name('details.create');
+    Route::post('/{nutrition}/details', 'NutritionController@storeDetail')->name('details.store');
+    // --------------
+
+    Route::delete('/details/{detail}', 'NutritionController@destroyDetail')->name('detail.destroy');
+});
