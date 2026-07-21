@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="h4 mb-0 fw-bold">練習記録一覧</h2>
         <a href="{{ route('practices.create') }}" class="btn btn-primary fw-bold">
-            ＋ 新規記録を作成
+            ＋ 新規練習
         </a>
     </div>
 

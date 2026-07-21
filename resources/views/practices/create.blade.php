@@ -70,7 +70,7 @@
                             <label class="form-label fs-7 fw-bold">本数/時間</label>
                             <select name="details[0][runs_or_time]" class="form-select form-select-sm">
                                 <option value="">選択</option>
-                                @foreach(['1本', '3本', '5本', '10本', '15分', '30分', '60分'] as $val)
+                                @foreach(['1本', '3本', '5本', '10本', '15本', '20本', '5分', '10分', '15分', '20分', '30分', '60分'] as $val)
                                     <option value="{{ $val }}">{{ $val }}</option>
                                 @endforeach
                             </select>
