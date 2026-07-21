@@ -645,7 +645,68 @@ class ShiftController extends Controller
     {
         //
         $title = "宿泊確認";
-        return view('dormitorystay', compact('title'));
+        //return view('dormitorystay', compact('title'));
+
+        $errortext = "";
+        $errorreason = "";
+
+        $user = Auth::user();
+        //
+        date_default_timezone_set('Asia/Tokyo'); // 日本時間に設定
+        $today = date('Y-m-d');
+        $shift_date = $today;
+
+        // 翌日の日付を取得
+        $shift_date1 = date('Y-m-d', strtotime('+1 day'));
+        // 翌翌日の日付を取得
+        $shift_date2 = date('Y-m-d', strtotime('+2 day'));
+
+        // 既存のシフトを取得
+        $shifts = Shift::where('shift_date', $shift_date)->with('user')->get();
+        $shifts1 = Shift::where('shift_date', $shift_date1)->with('user')->get();
+        $shifts2 = Shift::where('shift_date', $shift_date2)->with('user')->get();
+        if(!$shifts){
+            $errortext .= "エラーが発生しました。";
+            $errorreason .= "理由は知らんけど。";
+        }
+        if(!$shifts1){
+            $errortext .= "エラーが発生しました。";
+            $errorreason .= "理由は知らんけど。";
+        }
+        if(!$shifts2){
+            $errortext .= "エラーが発生しました。";
+            $errorreason .= "理由は知らんけど。";
+        }
+        if(strlen($errortext)>0){
+            return view('detail', compact('title','user', 'errortext', 'errorreason'));
+        }
+        $weekday = $this->getWeek($shift_date);
+        $weekday1 = $this->getWeek($shift_date1);
+        $weekday2 = $this->getWeek($shift_date2);
+        $totals = [
+            'stay' => $shifts->where('stay', 1)->count(),
+        ];
+        $totals1 = [
+            'stay' => $shifts1->where('stay', 1)->count(),
+        ];
+        $totals2 = [
+            'stay' => $shifts2->where('stay', 1)->count(),
+        ];
+        //dd($totals, $totals1, $totals2);
+        return view('dormitorystay', compact(
+            'title',
+            'shift_date',
+            'shift_date1',
+            'shift_date2',
+            'totals',
+            'totals1',
+            'totals2',
+            'weekday',
+            'weekday1',
+            'weekday2'
+        ));
+
+
     }
 
     //送迎確認
