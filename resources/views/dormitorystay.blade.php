@@ -10,7 +10,7 @@
                 <thead>
                 <tr>
                     <th class="headerinfo">日付</th>
-                    <th class="headerinfo">寮夕食</th>
+                    <th class="headerinfo">寮宿泊</th>
                 </tr>
                 </thead>
                 <tbody>
