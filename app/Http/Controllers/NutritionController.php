@@ -10,9 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class NutritionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $nutritions = Nutrition::orderBy('nutrition_date', 'desc')->get();
+        // 修正: ログインユーザーのデータのみに絞り込む
+        $nutritions = Nutrition::where('user_id', auth()->id())
+            ->orderBy('nutrition_date', 'desc')
+            ->get();
+
         return view('nutritions.index', compact('nutritions'));
     }
 
@@ -49,22 +58,24 @@ class NutritionController extends Controller
         return redirect()->route('nutritions.index')->with('success', '登録しました');
     }
 
-    // 追加：showメソッド
     public function show($id)
     {
-        $nutrition = Nutrition::with('details')->findOrFail($id);
+        // 修正: 他人のデータを見られないようにチェック
+        $nutrition = Nutrition::where('user_id', auth()->id())->with('details')->findOrFail($id);
         return view('nutritions.show', compact('nutrition'));
     }
 
     public function edit($id)
     {
-        $nutrition = Nutrition::with('details')->findOrFail($id);
+        // 修正: 他人のデータを編集できないようにチェック
+        $nutrition = Nutrition::where('user_id', auth()->id())->with('details')->findOrFail($id);
         return view('nutritions.edit', compact('nutrition'));
     }
 
     public function update(Request $request, $id)
     {
-        $nutrition = Nutrition::findOrFail($id);
+        // 修正: 他人のデータを更新できないようにチェック
+        $nutrition = Nutrition::where('user_id', auth()->id())->findOrFail($id);
 
         DB::transaction(function () use ($request, $nutrition) {
             $nutrition->update($request->only(['nutrition_date', 'daily_memo']));
@@ -91,16 +102,15 @@ class NutritionController extends Controller
 
     public function destroy($id)
     {
-        $nutrition = \App\Nutrition::findOrFail($id);
+        // 修正: 他人のデータを削除できないようにチェック
+        $nutrition = Nutrition::where('user_id', auth()->id())->findOrFail($id);
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($nutrition) {
-            // 関連する詳細データの写真をストレージから削除
+        DB::transaction(function () use ($nutrition) {
             foreach ($nutrition->details as $detail) {
                 if ($detail->photo_path) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($detail->photo_path);
+                    Storage::disk('public')->delete($detail->photo_path);
                 }
             }
-            // データベースの関連レコードを削除
             $nutrition->details()->delete();
             $nutrition->delete();
         });
@@ -110,11 +120,15 @@ class NutritionController extends Controller
 
     public function destroyDetail($id)
     {
-        $detail = \App\NutritionDetail::findOrFail($id);
+        $detail = NutritionDetail::with('nutrition')->findOrFail($id);
 
-        // 写真がある場合は削除
+        // 所属するNutritionのuser_idが一致しているか確認
+        if ($detail->nutrition->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         if ($detail->photo_path) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($detail->photo_path);
+            Storage::disk('public')->delete($detail->photo_path);
         }
 
         $detail->delete();
@@ -122,19 +136,18 @@ class NutritionController extends Controller
         return back()->with('success', '食事詳細を削除しました');
     }
 
-    // 新規追加画面を表示
     public function createDetail($nutritionId)
     {
-        $nutrition = Nutrition::findOrFail($nutritionId);
+        $nutrition = Nutrition::where('user_id', auth()->id())->findOrFail($nutritionId);
         return view('nutritions.details.create', compact('nutrition'));
     }
 
-    // 新規追加データを保存
     public function storeDetail(Request $request, $nutritionId)
     {
-        // データの保存処理を記述
-        $detail = new \App\NutritionDetail();
-        $detail->nutrition_id = $nutritionId;
+        $nutrition = Nutrition::where('user_id', auth()->id())->findOrFail($nutritionId);
+
+        $detail = new NutritionDetail();
+        $detail->nutrition_id = $nutrition->id;
         $detail->meal_type = $request->meal_type;
         $detail->calories = $request->calories;
         $detail->protein = $request->protein;
