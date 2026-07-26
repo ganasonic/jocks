@@ -23,6 +23,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('index');
 Route::get('/index', 'HomeController@index')->name('index');
 Route::get('/home', 'HomeController@index')->name('index');
+Route::get('/staff', 'HomeController@index')->name('staff');
 
 //シフト管理
 //マイシフト
@@ -117,4 +118,9 @@ Route::prefix('nutritions')->name('nutritions.')->group(function () {
     // --------------
 
     Route::delete('/details/{detail}', 'NutritionController@destroyDetail')->name('detail.destroy');
+});
+
+// 選手管理
+Route::middleware('auth')->group(function () {
+    Route::get('/players', 'PlayerController@index')->name('players.index');
 });

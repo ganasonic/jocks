@@ -10,10 +10,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    const ROLE_PLAYER = 0;
-    const ROLE_COACH  = 1;
-    const ROLE_ADMIN  = 9;
-
+    const ROLE_PLAYER        = 1;   // 0001
+    const ROLE_NUTRITIONIST  = 2;   // 0010
+    const ROLE_TRAINER       = 4;   // 0100
+    const ROLE_COACH         = 8;   // 1000
+    const ROLE_ADMIN         = 15;  // 1111
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'role',
     ];
 
     /**
@@ -84,4 +85,97 @@ class User extends Authenticatable
         return $this->hasMany(Goal::class);
     }
 
+    /**
+     * 選手
+     */
+    public function isPlayer()
+    {
+        return ($this->role & self::ROLE_PLAYER) === self::ROLE_PLAYER;
+    }
+
+    /**
+     * 管理栄養士
+     */
+    public function isNutritionist()
+    {
+        return ($this->role & self::ROLE_NUTRITIONIST) === self::ROLE_NUTRITIONIST;
+    }
+
+    /**
+     * トレーナー
+     */
+    public function isTrainer()
+    {
+        return ($this->role & self::ROLE_TRAINER) === self::ROLE_TRAINER;
+    }
+
+    /**
+     * コーチ
+     */
+    public function isCoach()
+    {
+        return ($this->role & self::ROLE_COACH) === self::ROLE_COACH;
+    }
+
+    /**
+     * 管理者
+     */
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /**
+     * スタッフ判定
+     */
+    public function isStaff()
+    {
+        return $this->isCoach()
+            || $this->isTrainer()
+            || $this->isNutritionist()
+            || $this->isAdmin();
+    }
+
+    /**
+     * 権限名
+     */
+    public function getRoleNameAttribute()
+    {
+        if ($this->isAdmin()) {
+            return '管理者';
+        }
+
+        if ($this->isCoach()) {
+            return 'コーチ';
+        }
+
+        if ($this->isTrainer()) {
+            return 'トレーナー';
+        }
+
+        if ($this->isNutritionist()) {
+            return '管理栄養士';
+        }
+
+        return '選手';
+    }
+
+    /**
+     * 権限一覧
+     */
+    public static function roles()
+    {
+        return [
+            self::ROLE_PLAYER       => '選手',
+            self::ROLE_NUTRITIONIST => '管理栄養士',
+            self::ROLE_TRAINER      => 'トレーナー',
+            self::ROLE_COACH        => 'コーチ',
+            self::ROLE_ADMIN        => '管理者',
+        ];
+    }
+
+    public function hasRole($role)
+    {
+        return ($this->role & $role) === $role;
+    }
 }

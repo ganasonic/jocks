@@ -17,6 +17,13 @@ return [
             'url'       => '/myshift',
             'icon'      => 'fas fa-calendar-alt',
             'class'     => 'border-orange-100 bg-orange-50 text-orange-500',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu02' => [
             'name'      => 'シフト詳細',
@@ -24,6 +31,12 @@ return [
             'url'       => '/detail',
             'icon'      => 'fas fa-calendar-check',
             'class'     => 'border-orange-100 bg-orange-50 text-orange-500',
+            'roles' => [
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu03' => [
             'name'      => '食事確認',
@@ -31,6 +44,13 @@ return [
             'url'       => '/meal',
             'icon'      => 'fas fa-utensils',
             'class'     => 'border-yellow-100 bg-yellow-50 text-yellow-600',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu09' => [
             'name'      => '宿泊確認',
@@ -38,6 +58,13 @@ return [
             'url'       => '/dormitorystay',
             'icon'      => 'fas fa-bed',
             'class'     => 'border-blue-100 bg-blue-50 text-blue-500',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu11' => [
             'name'      => '日時管理',
@@ -45,6 +72,13 @@ return [
             'url'       => '/conditions',
             'icon'      => 'fas fa-heartbeat',
             'class'     => 'border-teal-100 bg-teal-50 text-teal-500',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu12' => [
             'name'      => '目標設定',
@@ -52,6 +86,13 @@ return [
             'url'       => '/goals',
             'icon'      => 'fas fa-chart-line',
             'class'     => 'border-indigo-100 bg-indigo-50 text-indigo-600',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu13' => [
             'name'      => 'トレーニング',
@@ -59,6 +100,13 @@ return [
             'url'       => '/trainings',
             'icon'      => 'fas fa-dumbbell',
             'class'     => 'border-green-100 bg-green-50 text-green-600',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu14' => [
             'name'      => '練習管理',
@@ -66,6 +114,13 @@ return [
             'url'       => '/practices',
             'icon'      => 'fas fa-clipboard-list',
             'class'     => 'border-emerald-100 bg-emerald-50 text-emerald-600',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu15' => [
             'name'      => '栄養管理',
@@ -73,6 +128,26 @@ return [
             'url'       => '/nutritions',
             'icon'      => 'fas fa-apple-alt',
             'class'     => 'border-amber-100 bg-amber-50 text-amber-600',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
+        ],
+        'menu50' => [
+            'name' => '選手管理',
+            'sub_name' => '担当選手',
+            'url' => '/players',
+            'icon' => 'fas fa-users',
+            'class' => 'border-cyan-100 bg-cyan-50 text-cyan-600',
+            'roles' => [
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
         'menu99' => [
             'name'      => 'ログアウト',
@@ -80,6 +155,13 @@ return [
             'url'       => '/logout',
             'icon'      => 'fas fa-sign-out-alt',
             'class'     => 'border-gray-200 bg-gray-100 text-gray-500',
+            'roles' => [
+                \App\User::ROLE_PLAYER,
+                \App\User::ROLE_COACH,
+                \App\User::ROLE_TRAINER,
+                \App\User::ROLE_NUTRITIONIST,
+                \App\User::ROLE_ADMIN,
+            ],
         ],
     ]
 ];

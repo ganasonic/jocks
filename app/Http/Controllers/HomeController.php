@@ -24,26 +24,41 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    //public function index()
-    //{
-    //    return view('home');
-    //}
     public function index()
     {
         $user = Auth::user();
 
-        if($user==null){
+        if (!$user) {
             return redirect('/');
         }
-        $menu = Config::get('menu.homemenu1');
-        //ddd($user->role);
-        //return view('home', compact('menu'));
-        return view('home',
-        [
+        //dd($user->role);
+
+        // 全メニュー取得
+        $allMenu = Config::get('menu.homemenu1');
+
+        // 権限に応じたメニューのみ抽出
+        $menu = [];
+
+        foreach ($allMenu as $item) {
+
+            // rolesが設定されていない場合は全員表示
+            if (!isset($item['roles'])) {
+                $menu[] = $item;
+                continue;
+            }
+
+            // 権限チェック
+            foreach ($item['roles'] as $role) {
+                if ($user->hasRole($role)) {
+                    $menu[] = $item;
+                    break;
+                }
+            }
+        }
+
+        return view('home', [
             'user' => $user,
-            'menu' => $menu
+            'menu' => $menu,
         ]);
     }
-
-
 }
