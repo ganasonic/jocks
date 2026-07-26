@@ -18,6 +18,10 @@
                             <input type="date" name="nutrition_date" class="form-control" value="{{ $nutrition->nutrition_date }}">
                         </div>
                         <div class="form-group">
+                            <label>選手メモ</label>
+                            <textarea name="daily_memo" class="form-control" rows="3">{{ $nutrition->daily_memo }}</textarea>
+                        </div>
+                        <div class="form-group">
                             <label>コーチのコメント</label>
                             <textarea name="feedback" class="form-control" rows="3">{{ $nutrition->feedback }}</textarea>
                         </div>

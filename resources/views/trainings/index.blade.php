@@ -67,6 +67,12 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div>
+                                <!-- コーチコメントを表示 -->
+                                <p class="card-text text-muted ml-2">
+                                    {{ $training->feedback ?? 'コーチコメントなし' }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 @endforeach

@@ -20,6 +20,10 @@
                         <label class="font-weight-bold">ワークアウト名</label>
                         <input type="text" name="title" class="form-control" value="{{ $training->title }}">
                     </div>
+                    <div class="col-12 col-md-8">
+                        <label class="font-weight-bold">コーチのコメント</label>
+                        <textarea name="feedback" class="form-control" rows="3">{{ $training->feedback }}</textarea>
+                    </div>
                 </div>
             </div>
         </div>

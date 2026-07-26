@@ -9,7 +9,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h3>日付: {{ $nutrition->nutrition_date }}</h3>
-                    <p>メモ: {{ $nutrition->daily_memo }}</p>
+                    <p><strong>選手メモ:</strong> {{ $nutrition->daily_memo }}</p>
                     {{-- 日ごとのコーチコメント --}}
                     @if(!empty($nutrition->feedback))
                         <p><strong>コーチコメント:</strong> {{ $nutrition->feedback }}</p>
