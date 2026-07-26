@@ -21,7 +21,7 @@ class CreateNutritionDetailsTable extends Migration
             $table->integer('calories')->nullable();
             $table->integer('protein')->nullable();
             $table->text('meal_memo')->nullable();
-            $table->text('meal_coach_comment')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamps();
         });
     }

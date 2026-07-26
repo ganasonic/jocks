@@ -108,7 +108,7 @@
                         {{-- コーチコメント欄 --}}
                         <div class="form-group mb-4 bg-light p-3 rounded border border-success">
                             <label class="form-label fw-bold text-success">コーチのコメント入力欄</label>
-                            <textarea name="coach_comment" class="form-control bg-white" rows="4" placeholder="（指導者・コーチが選手の振り返りを見てアドバイスを書き込みます）">{{ old('coach_comment', $goal->coach_comment) }}</textarea>
+                            <textarea name="feedback" class="form-control bg-white" rows="4" placeholder="（指導者・コーチが選手の振り返りを見てアドバイスを書き込みます）">{{ old('feedback', $goal->feedback) }}</textarea>
                         </div>
 
 

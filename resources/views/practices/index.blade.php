@@ -81,8 +81,8 @@
                                             @if($detail->impression)
                                                 <div><small class="text-muted">【感触】</small> {{ $detail->impression }}</div>
                                             @endif
-                                            @if($detail->coach_comment)
-                                                <div class="text-success"><small>【コーチ】</small> {{ $detail->coach_comment }}</div>
+                                            @if($detail->feedback)
+                                                <div class="text-success"><small>【コーチ】</small> {{ $detail->feedback }}</div>
                                             @endif
                                         </td>
                                     </tr>
@@ -92,9 +92,9 @@
                     </div>
                 @endif
 
-                @if($practice->overall_coach_comment)
+                @if($practice->feedback)
                     <div class="mt-3 p-2 bg-success-subtle border border-success-subtle rounded text-success">
-                        <strong>総評（コーチ）:</strong> {{ $practice->overall_coach_comment }}
+                        <strong>総評（コーチ）:</strong> {{ $practice->feedback }}
                     </div>
                 @endif
             </div>

@@ -15,8 +15,7 @@ class PracticeDetail extends Model
         'notice',
         'video_url',
         'coach_rating',
-        'coach_comment',
-        'item_coach_comment',
+        'feedback',
     ];
 
     public function practice()

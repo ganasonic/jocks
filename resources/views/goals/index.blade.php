@@ -72,7 +72,7 @@
                                             @endif
 
                                             {{-- コーチコメントの有無 --}}
-                                            @if($goal->coach_comment)
+                                            @if($goal->feedback)
                                                 <div class="text-success small mb-3">
                                                     💬 <strong>コーチからのフィードバックあり</strong>
                                                 </div>

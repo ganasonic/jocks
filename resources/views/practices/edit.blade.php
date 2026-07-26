@@ -41,7 +41,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold text-success">全体アドバイス・総評（コーチ）</label>
-                    <textarea name="overall_coach_comment" class="form-control border-success-subtle bg-success-subtle" rows="3">{{ old('overall_coach_comment', $practice->overall_coach_comment) }}</textarea>
+                    <textarea name="feedback" class="form-control border-success-subtle bg-success-subtle" rows="3">{{ old('feedback', $practice->feedback) }}</textarea>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="row g-2">
-                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label><textarea name="details[{{ $index }}][coach_comment]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2">{{ old("details.{$index}.coach_comment", $detail->coach_comment) }}</textarea></div>
+                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label><textarea name="details[{{ $index }}][feedback]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2">{{ old("details.{$index}.feedback", $detail->feedback) }}</textarea></div>
                         <div class="col-md-4"><label class="form-label fs-7">動画URL</label><input type="url" name="details[{{ $index }}][video_url]" class="form-control form-control-sm" value="{{ old("details.{$index}.video_url", $detail->video_url) }}"></div>
                     </div>
                 </div>

@@ -19,7 +19,7 @@ class Goal extends Model
         'achievement_rate',
         'countermeasure',
         'next_action',
-        'coach_comment',
+        'feedback',
         'coach_id'
     ];
 

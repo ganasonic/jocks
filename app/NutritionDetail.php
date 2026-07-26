@@ -15,7 +15,7 @@ class NutritionDetail extends Model
         'calories',
         'protein',
         'meal_memo',
-        'meal_coach_comment',
+        'feedback',
     ];
 
     public function nutrition()

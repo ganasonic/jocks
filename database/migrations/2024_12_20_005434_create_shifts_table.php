@@ -17,11 +17,6 @@ class CreateShiftsTable extends Migration
             $table->increments('id');
             $table->date('shift_date'); // 日付
             $table->unsignedInteger('user_id'); // USERID
-            // 外部キー制約を追加
-            //$table->foreign('user_id')
-            //    ->references('id')
-            //    ->on('users')
-            //    ->onDelete('cascade'); // 紐づけられたfamilyが削除されたら、このuser_idも削除
             $table->boolean('breakfast'); // 朝食
             $table->boolean('am_shift'); // 午前
             $table->boolean('lunch'); // 昼食

@@ -19,7 +19,7 @@
                         </div>
                         <div class="form-group">
                             <label>コーチのコメント</label>
-                            <textarea name="coach_comment" class="form-control" rows="3">{{ $nutrition->coach_comment }}</textarea>
+                            <textarea name="feedback" class="form-control" rows="3">{{ $nutrition->feedback }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
 
                         <div class="form-group mt-2">
                             <label>コーチのコメント</label>
-                            <textarea name="details[{{ $detail->id }}][meal_coach_comment]" class="form-control">{{ $detail->meal_coach_comment }}</textarea>
+                            <textarea name="details[{{ $detail->id }}][feedback]" class="form-control">{{ $detail->feedback }}</textarea>
                         </div>
 
                         <div class="mt-2 text-end">

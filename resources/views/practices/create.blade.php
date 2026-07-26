@@ -48,7 +48,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold text-success">全体アドバイス・総評（コーチ）</label>
-                    <textarea name="overall_coach_comment" class="form-control border-success-subtle bg-success-subtle" rows="3" placeholder="全体に対するアドバイスや総評を入力">{{ old('overall_coach_comment') }}</textarea>
+                    <textarea name="feedback" class="form-control border-success-subtle bg-success-subtle" rows="3" placeholder="全体に対するアドバイスや総評を入力">{{ old('feedback') }}</textarea>
                 </div>
             </div>
         </div>
@@ -102,7 +102,7 @@
                     </div>
 
                     <div class="row g-2">
-                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label><textarea name="details[0][coach_comment]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2"></textarea></div>
+                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label><textarea name="details[0][feedback]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2"></textarea></div>
                         <div class="col-md-4"><label class="form-label fs-7">動画URL</label><input type="url" name="details[0][video_url]" class="form-control form-control-sm" placeholder="https://..."></div>
                     </div>
                 </div>

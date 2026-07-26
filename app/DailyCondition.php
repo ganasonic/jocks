@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailyCondition extends Model
 {
+    protected $table = 'conditions';
+
 // 一括保存を許可するカラムを指定
     protected $fillable = [
         'user_id',

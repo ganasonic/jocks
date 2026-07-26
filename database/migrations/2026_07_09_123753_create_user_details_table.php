@@ -18,8 +18,6 @@ class CreateUserDetailsTable extends Migration
 
             // 外部キーの「連動設定」は外し、インデックス付きのただの数値カラムとして定義する
             $table->unsignedBigInteger('user_id')->unique();
-            // ↓ この1行を削除（またはコメントアウト）します
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->date('birthdate')->nullable();     // 生年月日
             $table->string('affiliation')->nullable(); // 所属チーム・学校など

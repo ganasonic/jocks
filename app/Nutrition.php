@@ -13,7 +13,7 @@ class Nutrition extends Model
         'user_id',
         'nutrition_date',
         'daily_memo',
-        'daily_coach_comment',
+        'feedback',
     ];
 
     public function details()

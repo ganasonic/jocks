@@ -18,7 +18,7 @@ class CreateNutritionsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->date('nutrition_date');
             $table->text('daily_memo')->nullable();
-            $table->text('daily_coach_comment')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamps();
         });
     }

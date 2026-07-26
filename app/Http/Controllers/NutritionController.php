@@ -78,7 +78,7 @@ class NutritionController extends Controller
         $nutrition = Nutrition::where('user_id', auth()->id())->findOrFail($id);
 
         DB::transaction(function () use ($request, $nutrition) {
-            $nutrition->update($request->only(['nutrition_date', 'daily_memo']));
+            $nutrition->update($request->only(['nutrition_date', 'daily_memo', 'feedback']));
 
             if ($request->has('details')) {
                 foreach ($request->details as $detailId => $data) {

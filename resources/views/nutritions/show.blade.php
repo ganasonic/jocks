@@ -11,8 +11,8 @@
                     <h3>日付: {{ $nutrition->nutrition_date }}</h3>
                     <p>メモ: {{ $nutrition->daily_memo }}</p>
                     {{-- 日ごとのコーチコメント --}}
-                    @if(!empty($nutrition->daily_coach_comment))
-                        <p><strong>コーチコメント:</strong> {{ $nutrition->daily_coach_comment }}</p>
+                    @if(!empty($nutrition->feedback))
+                        <p><strong>コーチコメント:</strong> {{ $nutrition->feedback }}</p>
                     @endif
                 </div>
             </div>
@@ -37,9 +37,9 @@
                     </div>
                     @endif
                     {{-- 食事ごとのコーチコメント --}}
-                    @if(!empty($detail->meal_coach_comment))
+                    @if(!empty($detail->feedback))
                     <div class="mt-2">
-                        <strong>コーチコメント:</strong> {{ $detail->meal_coach_comment }}
+                        <strong>コーチコメント:</strong> {{ $detail->feedback }}
                     </div>
                     @endif
                 </div>

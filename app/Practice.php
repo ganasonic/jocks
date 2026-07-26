@@ -17,7 +17,7 @@ class Practice extends Model
         'title',
         'practice_type',
         'target',
-        'overall_coach_comment',
+        'feedback',
     ];
 
     public function details()

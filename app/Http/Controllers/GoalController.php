@@ -95,7 +95,7 @@ class GoalController extends Controller
             'achievement_rate' => 'nullable|integer|between:0,100',
             'countermeasure'   => 'nullable|string',
             'next_action'      => 'nullable|string',
-            'coach_comment'    => 'nullable|string',
+            'feedback'    => 'nullable|string',
         ]);
 
         $goal->update($validated);

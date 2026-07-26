@@ -31,11 +31,11 @@
                 </div>
             @endif
 
-            @if($practice->overall_coach_comment)
+            @if($practice->feedback)
                 <div class="mb-3">
                     <strong class="text-success">全体アドバイス・総評（コーチ）:</strong>
                     <div class="p-3 bg-success-subtle border border-success-subtle text-success rounded mt-1">
-                        {{ $practice->overall_coach_comment }}
+                        {{ $practice->feedback }}
                     </div>
                 </div>
             @endif
@@ -70,9 +70,9 @@
                     @endif
                 </div>
 
-                @if($detail->coach_comment)
+                @if($detail->feedback)
                     <div class="p-2 bg-success-subtle text-success rounded fs-7 mb-2">
-                        <strong>アドバイス（コーチ）:</strong> {{ $detail->coach_comment }}
+                        <strong>アドバイス（コーチ）:</strong> {{ $detail->feedback }}
                     </div>
                 @endif
 

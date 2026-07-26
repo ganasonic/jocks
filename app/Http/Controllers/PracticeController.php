@@ -61,7 +61,7 @@ class PracticeController extends Controller
             'practice_type'           => 'nullable|string|max:255',
             'title'                   => 'nullable|string|max:255',
             'target'                  => 'nullable|string',
-            'overall_coach_comment'   => 'nullable|string',
+            'feedback'                => 'nullable|string',
             'details'                 => 'nullable|array',
             'details.*.menu_name'     => 'required|string|max:255',
             'details.*.runs_or_time'  => 'nullable|string|max:255',
@@ -69,7 +69,7 @@ class PracticeController extends Controller
             'details.*.coach_rating'  => 'nullable|integer|min:1|max:5',
             'details.*.impression'    => 'nullable|string',
             'details.*.notice'        => 'nullable|string',
-            'details.*.coach_comment' => 'nullable|string',
+            'details.*.feedback'      => 'nullable|string',
             'details.*.video_url'     => 'nullable|url',
         ]);
 
@@ -80,7 +80,7 @@ class PracticeController extends Controller
                 'practice_type'         => $request->practice_type,
                 'title'                 => $request->title,
                 'target'                => $request->target,
-                'overall_coach_comment' => $request->overall_coach_comment,
+                'feedback'              => $request->feedback,
             ]);
 
             if ($request->has('details')) {
@@ -93,7 +93,7 @@ class PracticeController extends Controller
                             'coach_rating'  => $detailData['coach_rating'] ?? null,
                             'impression'    => $detailData['impression'] ?? null,
                             'notice'        => $detailData['notice'] ?? null,
-                            'coach_comment' => $detailData['coach_comment'] ?? null,
+                            'feedback'      => $detailData['feedback'] ?? null,
                             'video_url'     => $detailData['video_url'] ?? null,
                         ]);
                     }
@@ -158,7 +158,7 @@ class PracticeController extends Controller
             'practice_type'           => 'nullable|string|max:255',
             'title'                   => 'nullable|string|max:255',
             'target'                  => 'nullable|string',
-            'overall_coach_comment'   => 'nullable|string',
+            'feedback'     => 'nullable|string',
             'details'                 => 'nullable|array',
             'details.*.menu_name'     => 'required|string|max:255',
             'details.*.runs_or_time'  => 'nullable|string|max:255',
@@ -166,7 +166,7 @@ class PracticeController extends Controller
             'details.*.coach_rating'  => 'nullable|integer|min:1|max:5',
             'details.*.impression'    => 'nullable|string',
             'details.*.notice'        => 'nullable|string',
-            'details.*.coach_comment' => 'nullable|string',
+            'details.*.feedback'      => 'nullable|string',
             'details.*.video_url'     => 'nullable|url',
         ]);
 
@@ -181,7 +181,7 @@ class PracticeController extends Controller
                 'practice_type'         => $request->practice_type,
                 'title'                 => $request->title,
                 'target'                => $request->target,
-                'overall_coach_comment' => $request->overall_coach_comment,
+                'feedback'   => $request->feedback,
             ]);
 
             // 一旦既存の明細を削除して全再作成
@@ -197,7 +197,7 @@ class PracticeController extends Controller
                             'coach_rating'  => $detailData['coach_rating'] ?? null,
                             'impression'    => $detailData['impression'] ?? null,
                             'notice'        => $detailData['notice'] ?? null,
-                            'coach_comment' => $detailData['coach_comment'] ?? null,
+                            'feedback' => $detailData['feedback'] ?? null,
                             'video_url'     => $detailData['video_url'] ?? null,
                         ]);
                     }
