@@ -60,7 +60,10 @@ class User extends Authenticatable
         });
     }
 
-    // リレーション定義
+    // =========================================
+    // リレーション
+    // =========================================
+
     /**
      * UserDetailモデルとのリレーション（1対1）
      */
@@ -84,6 +87,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(Goal::class);
     }
+
+    /**
+     * このスタッフが担当している選手
+     */
+    public function players()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'player_staff',
+            'staff_id',
+            'player_id'
+        );
+    }
+
+    /**
+     * この選手を担当しているスタッフ
+     */
+    public function staffs()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'player_staff',
+            'player_id',
+            'staff_id'
+        );
+    }
+
+    // =========================================
+    // 権限判定
+    // =========================================
 
     /**
      * 選手
@@ -136,6 +169,15 @@ class User extends Authenticatable
             || $this->isAdmin();
     }
 
+    public function hasRole($role)
+    {
+        return ($this->role & $role) === $role;
+    }
+
+    // =========================================
+    // 表示用
+    // =========================================
+
     /**
      * 権限名
      */
@@ -174,8 +216,4 @@ class User extends Authenticatable
         ];
     }
 
-    public function hasRole($role)
-    {
-        return ($this->role & $role) === $role;
-    }
 }

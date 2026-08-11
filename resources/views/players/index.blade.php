@@ -24,7 +24,11 @@
 
         <tr>
             <td>{{ $player->id }}</td>
-            <td>{{ $player->name }}</td>
+            <td>
+                <a href="{{ route('players.edit',$player) }}">
+                    {{ $player->name }}
+                </a>
+            </td>
             <td>{{ $player->email }}</td>
         </tr>
 

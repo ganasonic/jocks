@@ -121,6 +121,16 @@ Route::prefix('nutritions')->name('nutritions.')->group(function () {
 });
 
 // 選手管理
-Route::middleware('auth')->group(function () {
-    Route::get('/players', 'PlayerController@index')->name('players.index');
+Route::middleware('auth'/*,'staff'*/)->group(function () {
+
+    Route::get('/players', 'PlayerController@index')
+        ->name('players.index');
+
+    // 担当選手割り当て
+    Route::get('/players/{player}/edit', 'PlayerController@edit')
+        ->name('players.edit');
+
+    Route::post('/players/{player}', 'PlayerController@update')
+        ->name('players.update');
+
 });

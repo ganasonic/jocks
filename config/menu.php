@@ -137,11 +137,11 @@ return [
             ],
         ],
         'menu50' => [
-            'name' => '選手管理',
-            'sub_name' => '担当選手',
-            'url' => '/players',
-            'icon' => 'fas fa-users',
-            'class' => 'border-cyan-100 bg-cyan-50 text-cyan-600',
+            'name'      => '担当選手',
+            'sub_name'  => '担当選手管理',
+            'url'       => '/players',
+            'icon'      => 'fas fa-users',
+            'class'     => 'border-cyan-100 bg-cyan-50 text-cyan-600',
             'roles' => [
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
