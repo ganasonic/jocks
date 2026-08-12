@@ -61,6 +61,7 @@
         <h3 class="h5 fw-bold mb-3">練習メニュー</h3>
         <div id="details-container">
             @foreach($practice->details as $index => $detail)
+            <input type="hidden" name="details[{{ $index }}][id]" value="{{ $detail->id }}">
             <div class="card shadow-sm border-light-subtle mb-3 detail-item">
                 <div class="card-body p-3">
                     <div class="row g-2 mb-2">

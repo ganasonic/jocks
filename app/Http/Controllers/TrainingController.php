@@ -113,27 +113,68 @@ class TrainingController extends Controller
 
         $training->update($updateData);
 
-        // 2. 既存の明細を一気に削除して作り直す（一番安全で確実な手法）
-        $training->details()->delete();
+        // 2. 明細をID単位で更新
+        $submittedDetailIds = [];
 
         if ($request->has('details')) {
+
             foreach ($request->details as $detail) {
-                if (!empty($detail['exercise_name'])) {
-                    $detailData = [
-                        'exercise_name'        => $detail['exercise_name'],
-                        'weight'               => $detail['weight'] ?? null,
-                        'reps'                 => $detail['reps'] ?? null,
-                        'sets'                 => $detail['sets'] ?? null,
-                        'interval'             => $detail['interval'] ?? null,
-                        'rpe'                  => $detail['rpe'] ?? null,
-                        'rest_after_exercise' => $detail['rest_after_exercise'] ?? null,
-                    ];
-                    if (auth()->user()->isStaff()) {
-                        $detailData['feedback'] = $detail['feedback'] ?? null;
+
+                if (empty($detail['exercise_name'])) {
+                    continue;
+                }
+
+                $detailData = [
+                    'exercise_name'       => $detail['exercise_name'],
+                    'weight'              => $detail['weight'] ?? null,
+                    'reps'                => $detail['reps'] ?? null,
+                    'sets'                => $detail['sets'] ?? null,
+                    'interval'            => $detail['interval'] ?? null,
+                    'rpe'                 => $detail['rpe'] ?? null,
+                    'rest_after_exercise' => $detail['rest_after_exercise'] ?? null,
+                ];
+
+                // スタッフだけfeedbackを更新できる
+                if ($user->isStaff()) {
+                    $detailData['feedback'] = $detail['feedback'] ?? null;
+                }
+
+                // 既存明細
+                if (!empty($detail['id'])) {
+
+                    $trainingDetail = $training->details()
+                        ->where('id', $detail['id'])
+                        ->first();
+
+                    if ($trainingDetail) {
+
+                        $trainingDetail->update($detailData);
+
+                        $submittedDetailIds[] = $trainingDetail->id;
                     }
-                    $training->details()->create($detailData);
+
+                } else {
+
+                    // 新規明細
+                    $trainingDetail = $training->details()
+                        ->create($detailData);
+
+                    $submittedDetailIds[] = $trainingDetail->id;
                 }
             }
+        }
+
+        // 画面から削除された明細だけDBから削除
+        if (!empty($submittedDetailIds)) {
+
+            $training->details()
+                ->whereNotIn('id', $submittedDetailIds)
+                ->delete();
+
+        } else {
+
+            // 明細が全部削除された場合
+            $training->details()->delete();
         }
 
         return redirect()->route('trainings.index')->with('success', 'トレーニングを更新しました！');

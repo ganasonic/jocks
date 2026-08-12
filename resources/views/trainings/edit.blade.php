@@ -45,6 +45,7 @@
         <!-- 種目カードエリア -->
         <div id="details-container">
             @foreach($training->details as $index => $detail)
+                <input type="hidden" name="details[{{ $index }}][id]" value="{{ $detail->id }}">
                 <div class="card shadow-sm mb-4 detail-item">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">

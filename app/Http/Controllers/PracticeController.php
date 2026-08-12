@@ -229,12 +229,8 @@ class PracticeController extends Controller
 
             $practice->update($practiceData);
 
-            /*
-             * いまは既存方式を維持
-             * 後で training_details と同様に
-             * ID単位更新方式へ変更した方が安全
-             */
-            $practice->details()->delete();
+            // 明細をID単位で更新
+            $submittedDetailIds = [];
 
             if ($request->has('details')) {
 
@@ -253,14 +249,49 @@ class PracticeController extends Controller
                         'video_url'    => $detailData['video_url'] ?? null,
                     ];
 
+                    // スタッフだけコーチ側項目を更新
                     if ($user->isStaff()) {
                         $data['coach_rating'] = $detailData['coach_rating'] ?? null;
                         $data['feedback']     = $detailData['feedback'] ?? null;
                     }
 
-                    $practice->details()->create($data);
+                    // 既存明細
+                    if (!empty($detailData['id'])) {
+
+                        $practiceDetail = $practice->details()
+                            ->where('id', $detailData['id'])
+                            ->first();
+
+                        if ($practiceDetail) {
+
+                            $practiceDetail->update($data);
+
+                            $submittedDetailIds[] = $practiceDetail->id;
+                        }
+
+                    } else {
+
+                        // 新規明細
+                        $practiceDetail = $practice->details()
+                            ->create($data);
+
+                        $submittedDetailIds[] = $practiceDetail->id;
+                    }
                 }
             }
+
+            // 画面上で削除された明細だけ削除
+            if (!empty($submittedDetailIds)) {
+
+                $practice->details()
+                    ->whereNotIn('id', $submittedDetailIds)
+                    ->delete();
+
+            } else {
+
+                $practice->details()->delete();
+            }
+
         });
 
         return redirect()
