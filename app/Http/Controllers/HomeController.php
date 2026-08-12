@@ -32,6 +32,11 @@ class HomeController extends Controller
             return redirect('/');
         }
         //dd($user->role);
+        // ホーム画面に来たら「本人モード」に戻す
+        session()->forget([
+            'target_player_id',
+            'target_player_name',
+        ]);
 
         // 全メニュー取得
         $allMenu = Config::get('menu.homemenu1');
@@ -61,4 +66,5 @@ class HomeController extends Controller
             'menu' => $menu,
         ]);
     }
+
 }

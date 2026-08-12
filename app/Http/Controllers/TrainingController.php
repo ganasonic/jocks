@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+
 use Illuminate\Http\Request;
 use App\Training;
 use App\TrainingDetail;
@@ -29,11 +31,15 @@ class TrainingController extends Controller
 
     public function store(Request $request)
     {
-        $userId = auth()->id();
+        $user = auth()->user();
+
+        $userId = $user->targetPlayerId();
 
         // 1. トレーニングのメインデータを保存
         $training = \App\Training::create([
             'user_id'       => $userId,
+            'created_by'    => auth()->id(),
+            'updated_by'    => auth()->id(),
             'title'         => $request->title ?? 'ワークアウト', // ワークアウト名（空ならデフォルト値）
             'training_date' => $request->training_date,
         ]);
@@ -63,8 +69,12 @@ class TrainingController extends Controller
     // 編集画面表示
     public function edit(\App\Training $training)
     {
-        // 他人のデータはいじれないようにチェック
-        if ($training->user_id !== auth()->id()) {
+        $user = auth()->user();
+
+        $targetPlayerId = $user->targetPlayerId();
+
+        // 現在操作対象の選手のデータでなければ編集禁止
+        if (!$targetPlayerId || $training->user_id != $targetPlayerId) {
             abort(403);
         }
 
@@ -81,15 +91,27 @@ class TrainingController extends Controller
     // 更新処理
     public function update(Request $request, \App\Training $training)
     {
-        if ($training->user_id !== auth()->id()) {
+        $user = auth()->user();
+
+        $targetPlayerId = $user->targetPlayerId();
+
+        if (!$targetPlayerId || $training->user_id != $targetPlayerId) {
             abort(403);
         }
 
         // 1. メインデータの更新
-        $training->update([
+        $updateData = [
             'title'         => $request->title ?? 'ワークアウト',
             'training_date' => $request->training_date,
-        ]);
+            'updated_by'    => auth()->id(),
+        ];
+
+        // フィードバックはスタッフだけ更新可能
+        if (auth()->user()->isStaff()) {
+            $updateData['feedback'] = $request->feedback;
+        }
+
+        $training->update($updateData);
 
         // 2. 既存の明細を一気に削除して作り直す（一番安全で確実な手法）
         $training->details()->delete();
@@ -97,7 +119,7 @@ class TrainingController extends Controller
         if ($request->has('details')) {
             foreach ($request->details as $detail) {
                 if (!empty($detail['exercise_name'])) {
-                    $training->details()->create([
+                    $detailData = [
                         'exercise_name'        => $detail['exercise_name'],
                         'weight'               => $detail['weight'] ?? null,
                         'reps'                 => $detail['reps'] ?? null,
@@ -105,7 +127,11 @@ class TrainingController extends Controller
                         'interval'             => $detail['interval'] ?? null,
                         'rpe'                  => $detail['rpe'] ?? null,
                         'rest_after_exercise' => $detail['rest_after_exercise'] ?? null,
-                    ]);
+                    ];
+                    if (auth()->user()->isStaff()) {
+                        $detailData['feedback'] = $detail['feedback'] ?? null;
+                    }
+                    $training->details()->create($detailData);
                 }
             }
         }
@@ -115,8 +141,12 @@ class TrainingController extends Controller
 
     public function index()
     {
-        // ログインユーザーのトレーニング記録を日付順（新しい順）で取得
-        $trainings = \App\Training::where('user_id', auth()->id())
+        $user = Auth::user();
+
+        $targetPlayerId = $user->targetPlayerId();
+
+        // ユーザーのトレーニング記録を日付順（新しい順）で取得
+        $trainings = \App\Training::where('user_id', $targetPlayerId)
             ->orderBy('training_date', 'desc')
             ->with('details') // 詳細データも一緒に取得
             ->get();

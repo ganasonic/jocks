@@ -14,6 +14,7 @@
         <tr>
             <th>ID</th>
             <th>氏名</th>
+            <th>操作</th>
             <th>メール</th>
         </tr>
         </thead>
@@ -24,10 +25,10 @@
 
         <tr>
             <td>{{ $player->id }}</td>
+            <td>{{ $player->name }}</td>
             <td>
-                <a href="{{ route('players.edit',$player) }}">
-                    {{ $player->name }}
-                </a>
+                <a href="{{ route('players.edit',$player) }}" class="btn btn-primary">担当割当</a>
+                <a href="{{ route('players.show', $player->id) }}" class="btn btn-info">管理</a>
             </td>
             <td>{{ $player->email }}</td>
         </tr>

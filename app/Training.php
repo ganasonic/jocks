@@ -9,9 +9,13 @@ class Training extends Model
     protected $fillable = [
         'user_id',
         'training_date',
+        'created_by',
+        'updated_by',
         'title',
         'start_time',
-        'end_time', 'memo'
+        'end_time',
+        'memo',
+        'feedback',
     ];
 
     // 子テーブル（詳細）とのリレーション

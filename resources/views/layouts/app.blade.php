@@ -118,6 +118,21 @@
             </div>
         </nav>
 
+        @auth
+            @if(Auth::user()->isStaff() && session('target_player_id'))
+                <div class="container mt-3">
+                    <div class="alert alert-info mb-0">
+                        現在の対象選手：
+                        <strong>{{ session('target_player_name') }}</strong>
+
+                        <a href="{{ route('players.index') }}"
+                        class="btn btn-sm btn-outline-primary ms-3">
+                            選手を変更
+                        </a>
+                    </div>
+                </div>
+            @endif
+        @endauth
         <main class="py-4">
             @yield('content')
         </main>

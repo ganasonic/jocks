@@ -216,4 +216,37 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * 現在操作対象のユーザーIDを取得
+     *
+     * 対象選手が選択されている場合はその選手ID。
+     * 選択されていない場合はログイン本人のID。
+     */
+    public function targetPlayerId()
+    {
+        if (session()->has('target_player_id')) {
+            return session('target_player_id');
+        }
+
+        return $this->id;
+    }
+
+    /**
+     * 現在操作対象の選手を取得
+     */
+    public function targetPlayer()
+    {
+        $playerId = $this->targetPlayerId();
+
+        if (!$playerId) {
+            return null;
+        }
+
+        return self::find($playerId);
+    }
+
+    public function hasTargetPlayer()
+    {
+        return session()->has('target_player_id');
+    }
 }

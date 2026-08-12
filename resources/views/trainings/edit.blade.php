@@ -21,8 +21,22 @@
                         <input type="text" name="title" class="form-control" value="{{ $training->title }}">
                     </div>
                     <div class="col-12 col-md-8">
-                        <label class="font-weight-bold">コーチのコメント</label>
-                        <textarea name="feedback" class="form-control" rows="3">{{ $training->feedback }}</textarea>
+                        <div class="col-12 mt-3">
+                            <label class="font-weight-bold">フィードバック</label>
+
+                            @if(Auth::user()->isStaff())
+                                <textarea
+                                    name="feedback"
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="トレーニング全体へのフィードバックを入力してください"
+                                >{{ old('feedback', $training->feedback) }}</textarea>
+                            @else
+                                <div class="form-control bg-light" style="height: auto; min-height: 80px;">
+                                    {{ $training->feedback ?: 'フィードバックはありません。' }}
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,6 +114,23 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="border-top pt-3 mt-3">
+                            <label class="font-weight-bold">フィードバック</label>
+
+                            @if(Auth::user()->isStaff())
+                                <textarea
+                                    name="details[{{ $index }}][feedback]"
+                                    class="form-control"
+                                    rows="2"
+                                    placeholder="この種目へのフィードバックを入力してください"
+                                >{{ old('details.' . $index . '.feedback', $detail->feedback) }}</textarea>
+                            @else
+                                <div class="form-control bg-light" style="height: auto; min-height: 60px;">
+                                    {{ $detail->feedback ?: 'フィードバックはありません。' }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

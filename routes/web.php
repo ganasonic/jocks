@@ -133,4 +133,8 @@ Route::middleware('auth'/*,'staff'*/)->group(function () {
     Route::post('/players/{player}', 'PlayerController@update')
         ->name('players.update');
 
+    // 選手選択後のメニュー
+    Route::get('/players/{player}', 'PlayerController@show')
+        ->name('players.show');
+
 });
