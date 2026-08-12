@@ -13,6 +13,8 @@ class Practice extends Model
 
     protected $fillable = [
         'user_id',
+        'created_by',
+        'updated_by',
         'practice_date',
         'title',
         'practice_type',

@@ -6,6 +6,7 @@ use App\Practice;
 use App\PracticeDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class PracticeController extends Controller
 {
@@ -14,8 +15,10 @@ class PracticeController extends Controller
      */
     public function index()
     {
-        // ログインユーザーのデータのみに絞り込む
-        $practices = Practice::where('user_id', auth()->id())
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
+        $practices = Practice::where('user_id', $targetPlayerId)
             ->with('details')
             ->orderBy('practice_date', 'desc')
             ->paginate(10);
@@ -28,19 +31,18 @@ class PracticeController extends Controller
      */
     public function create()
     {
-        // ログインユーザーが過去に入力した種別・カテゴリの履歴（重複排除）
-        $recentTypes = Practice::where('user_id', auth()->id())
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
+        $recentTypes = Practice::where('user_id', $targetPlayerId)
             ->whereNotNull('practice_type')
             ->where('practice_type', '!=', '')
             ->pluck('practice_type')
             ->unique()
             ->values();
 
-        // ログインユーザーが過去に入力したメニュー名の履歴（重複排除）
-        // ※PracticeDetail側にもuser_idがあるか、あるいは親経由で絞り込む形にする必要がありますが、
-        //   ここでは安全のため親（Practice）のuser_idで紐づくものに限定しています
-        $recentMenus = PracticeDetail::whereHas('practice', function ($query) {
-                $query->where('user_id', auth()->id());
+        $recentMenus = PracticeDetail::whereHas('practice', function ($query) use ($targetPlayerId) {
+                $query->where('user_id', $targetPlayerId);
             })
             ->whereNotNull('menu_name')
             ->where('menu_name', '!=', '')
@@ -48,7 +50,10 @@ class PracticeController extends Controller
             ->unique()
             ->values();
 
-        return view('practices.create', compact('recentTypes', 'recentMenus'));
+        return view('practices.create', compact(
+            'recentTypes',
+            'recentMenus'
+        ));
     }
 
     /**
@@ -73,35 +78,58 @@ class PracticeController extends Controller
             'details.*.video_url'     => 'nullable|url',
         ]);
 
-        DB::transaction(function () use ($request) {
-            $practice = Practice::create([
-                'user_id'               => auth()->id(), // デフォルト値のフォールバックを廃止し、必ずログインIDを強制
-                'practice_date'         => $request->practice_date,
-                'practice_type'         => $request->practice_type,
-                'title'                 => $request->title,
-                'target'                => $request->target,
-                'feedback'              => $request->feedback,
-            ]);
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
+        DB::transaction(function () use ($request, $user, $targetPlayerId) {
+
+            $practiceData = [
+                'user_id'       => $targetPlayerId,
+                'created_by'    => $user->id,
+                'updated_by'    => $user->id,
+                'practice_date' => $request->practice_date,
+                'practice_type' => $request->practice_type,
+                'title'         => $request->title,
+                'target'        => $request->target,
+            ];
+
+            // スタッフだけフィードバック登録可能
+            if ($user->isStaff()) {
+                $practiceData['feedback'] = $request->feedback;
+            }
+
+            $practice = Practice::create($practiceData);
 
             if ($request->has('details')) {
+
                 foreach ($request->details as $detailData) {
-                    if (!empty($detailData['menu_name'])) {
-                        $practice->details()->create([
-                            'menu_name'     => $detailData['menu_name'],
-                            'runs_or_time'  => $detailData['runs_or_time'] ?? null,
-                            'rating'        => $detailData['rating'] ?? null,
-                            'coach_rating'  => $detailData['coach_rating'] ?? null,
-                            'impression'    => $detailData['impression'] ?? null,
-                            'notice'        => $detailData['notice'] ?? null,
-                            'feedback'      => $detailData['feedback'] ?? null,
-                            'video_url'     => $detailData['video_url'] ?? null,
-                        ]);
+
+                    if (empty($detailData['menu_name'])) {
+                        continue;
                     }
+
+                    $data = [
+                        'menu_name'    => $detailData['menu_name'],
+                        'runs_or_time' => $detailData['runs_or_time'] ?? null,
+                        'rating'       => $detailData['rating'] ?? null,
+                        'impression'   => $detailData['impression'] ?? null,
+                        'notice'       => $detailData['notice'] ?? null,
+                        'video_url'    => $detailData['video_url'] ?? null,
+                    ];
+
+                    if ($user->isStaff()) {
+                        $data['coach_rating'] = $detailData['coach_rating'] ?? null;
+                        $data['feedback']     = $detailData['feedback'] ?? null;
+                    }
+
+                    $practice->details()->create($data);
                 }
             }
         });
 
-        return redirect()->route('practices.index')->with('status', '練習記録を登録しました。');
+        return redirect()
+            ->route('practices.index')
+            ->with('status', '練習記録を登録しました。');
     }
 
     /**
@@ -109,9 +137,11 @@ class PracticeController extends Controller
      */
     public function show($id)
     {
-        // 他人のデータを見られないよう、IDとuser_idの両方で取得（他人の場合は404）
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
         $practice = Practice::where('id', $id)
-            ->where('user_id', auth()->id())
+            ->where('user_id', $targetPlayerId)
             ->with('details')
             ->firstOrFail();
 
@@ -123,21 +153,23 @@ class PracticeController extends Controller
      */
     public function edit($id)
     {
-        // 他人のデータを編集させない
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
         $practice = Practice::where('id', $id)
-            ->where('user_id', auth()->id())
+            ->where('user_id', $targetPlayerId)
             ->with('details')
             ->firstOrFail();
 
-        $recentTypes = Practice::where('user_id', auth()->id())
+        $recentTypes = Practice::where('user_id', $targetPlayerId)
             ->whereNotNull('practice_type')
             ->where('practice_type', '!=', '')
             ->pluck('practice_type')
             ->unique()
             ->values();
 
-        $recentMenus = PracticeDetail::whereHas('practice', function ($query) {
-                $query->where('user_id', auth()->id());
+        $recentMenus = PracticeDetail::whereHas('practice', function ($query) use ($targetPlayerId) {
+                $query->where('user_id', $targetPlayerId);
             })
             ->whereNotNull('menu_name')
             ->where('menu_name', '!=', '')
@@ -145,7 +177,11 @@ class PracticeController extends Controller
             ->unique()
             ->values();
 
-        return view('practices.edit', compact('practice', 'recentTypes', 'recentMenus'));
+        return view('practices.edit', compact(
+            'practice',
+            'recentTypes',
+            'recentMenus'
+        ));
     }
 
     /**
@@ -158,7 +194,7 @@ class PracticeController extends Controller
             'practice_type'           => 'nullable|string|max:255',
             'title'                   => 'nullable|string|max:255',
             'target'                  => 'nullable|string',
-            'feedback'     => 'nullable|string',
+            'feedback'                => 'nullable|string',
             'details'                 => 'nullable|array',
             'details.*.menu_name'     => 'required|string|max:255',
             'details.*.runs_or_time'  => 'nullable|string|max:255',
@@ -170,42 +206,66 @@ class PracticeController extends Controller
             'details.*.video_url'     => 'nullable|url',
         ]);
 
-        DB::transaction(function () use ($request, $id) {
-            // 他人のデータを不正に更新されないよう絞り込み
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
+        DB::transaction(function () use ($request, $id, $user, $targetPlayerId) {
+
             $practice = Practice::where('id', $id)
-                ->where('user_id', auth()->id())
+                ->where('user_id', $targetPlayerId)
                 ->firstOrFail();
 
-            $practice->update([
-                'practice_date'         => $request->practice_date,
-                'practice_type'         => $request->practice_type,
-                'title'                 => $request->title,
-                'target'                => $request->target,
-                'feedback'   => $request->feedback,
-            ]);
+            $practiceData = [
+                'practice_date' => $request->practice_date,
+                'practice_type' => $request->practice_type,
+                'title'         => $request->title,
+                'target'        => $request->target,
+                'updated_by'    => $user->id,
+            ];
 
-            // 一旦既存の明細を削除して全再作成
+            if ($user->isStaff()) {
+                $practiceData['feedback'] = $request->feedback;
+            }
+
+            $practice->update($practiceData);
+
+            /*
+             * いまは既存方式を維持
+             * 後で training_details と同様に
+             * ID単位更新方式へ変更した方が安全
+             */
             $practice->details()->delete();
 
             if ($request->has('details')) {
+
                 foreach ($request->details as $detailData) {
-                    if (!empty($detailData['menu_name'])) {
-                        $practice->details()->create([
-                            'menu_name'     => $detailData['menu_name'],
-                            'runs_or_time'  => $detailData['runs_or_time'] ?? null,
-                            'rating'        => $detailData['rating'] ?? null,
-                            'coach_rating'  => $detailData['coach_rating'] ?? null,
-                            'impression'    => $detailData['impression'] ?? null,
-                            'notice'        => $detailData['notice'] ?? null,
-                            'feedback' => $detailData['feedback'] ?? null,
-                            'video_url'     => $detailData['video_url'] ?? null,
-                        ]);
+
+                    if (empty($detailData['menu_name'])) {
+                        continue;
                     }
+
+                    $data = [
+                        'menu_name'    => $detailData['menu_name'],
+                        'runs_or_time' => $detailData['runs_or_time'] ?? null,
+                        'rating'       => $detailData['rating'] ?? null,
+                        'impression'   => $detailData['impression'] ?? null,
+                        'notice'       => $detailData['notice'] ?? null,
+                        'video_url'    => $detailData['video_url'] ?? null,
+                    ];
+
+                    if ($user->isStaff()) {
+                        $data['coach_rating'] = $detailData['coach_rating'] ?? null;
+                        $data['feedback']     = $detailData['feedback'] ?? null;
+                    }
+
+                    $practice->details()->create($data);
                 }
             }
         });
 
-        return redirect()->route('practices.index')->with('status', '練習記録を更新しました。');
+        return redirect()
+            ->route('practices.index')
+            ->with('status', '練習記録を更新しました。');
     }
 
     /**
@@ -213,13 +273,17 @@ class PracticeController extends Controller
      */
     public function destroy($id)
     {
-        // 他人のデータを勝手に削除されないよう絞り込み
+        $user = Auth::user();
+        $targetPlayerId = $user->targetPlayerId();
+
         $practice = Practice::where('id', $id)
-            ->where('user_id', auth()->id())
+            ->where('user_id', $targetPlayerId)
             ->firstOrFail();
 
         $practice->delete();
 
-        return redirect()->route('practices.index')->with('status', '練習記録を削除しました。');
+        return redirect()
+            ->route('practices.index')
+            ->with('status', '練習記録を削除しました。');
     }
 }

@@ -41,7 +41,19 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold text-success">全体アドバイス・総評（コーチ）</label>
-                    <textarea name="feedback" class="form-control border-success-subtle bg-success-subtle" rows="3">{{ old('feedback', $practice->feedback) }}</textarea>
+                    @if(Auth::user()->isStaff())
+                        <textarea
+                            name="feedback"
+                            class="form-control border-success-subtle bg-success-subtle"
+                            rows="3"
+                        >{{ old('feedback', $practice->feedback) }}</textarea>
+                    @else
+
+                        <div class="form-control bg-light" style="height:auto; min-height:80px;">
+                            {{ $practice->feedback ?: 'フィードバックはありません。' }}
+                        </div>
+
+                    @endif
                 </div>
             </div>
         </div>
@@ -76,12 +88,23 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fs-7 fw-bold text-primary">コーチ達成度</label>
+                            @if(Auth::user()->isStaff())
                             <select name="details[{{ $index }}][coach_rating]" class="form-select form-select-sm border-primary">
                                 <option value="">選択なし</option>
                                 @for($i = 1; $i <= 5; $i++)
                                     <option value="{{ $i }}" {{ old("details.{$index}.coach_rating", $detail->coach_rating) == $i ? 'selected' : '' }}>{{ $i }} ({{ str_repeat('★', $i) }})</option>
                                 @endfor
                             </select>
+                            @else
+                            <div>
+                                @if($detail->coach_rating)
+                                    {{ $detail->coach_rating }}
+                                    （{{ str_repeat('★', $detail->coach_rating) }}）
+                                @else
+                                    -
+                                @endif
+                            </div>
+                            @endif
                         </div>
                     </div>
 
@@ -91,7 +114,15 @@
                     </div>
 
                     <div class="row g-2">
-                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label><textarea name="details[{{ $index }}][feedback]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2">{{ old("details.{$index}.feedback", $detail->feedback) }}</textarea></div>
+                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label>
+                        @if(Auth::user()->isStaff())
+                            <textarea name="details[{{ $index }}][feedback]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2">{{ old("details.{$index}.feedback", $detail->feedback) }}</textarea>
+                        @else
+                            <div class="form-control bg-light" style="height:auto; min-height:60px;">
+                                {{ $detail->feedback ?: 'フィードバックはありません。' }}
+                            </div>
+                        @endif
+                    </div>
                         <div class="col-md-4"><label class="form-label fs-7">動画URL</label><input type="url" name="details[{{ $index }}][video_url]" class="form-control form-control-sm" value="{{ old("details.{$index}.video_url", $detail->video_url) }}"></div>
                     </div>
                 </div>

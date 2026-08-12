@@ -99,7 +99,7 @@
         </div>
 
         <div class="col-12 col-sm-6 col-md-4">
-            <a href="#" class="player-menu-card">
+            <a href="{{ route('practices.index') }}" class="player-menu-card">
                 <div class="player-menu-icon">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
