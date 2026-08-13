@@ -29,7 +29,36 @@
                         {{-- 体温 --}}
                         <div class="form-group mb-3">
                             <label for="body_temperature">体温 (°C)</label>
-                            <input type="number" step="0.01" name="body_temperature" id="body_temperature" class="form-control" value="{{ old('body_temperature', $condition->body_temperature) }}">
+                            <select
+                                name="body_temperature"
+                                id="body_temperature"
+                                class="form-control @error('body_temperature') is-invalid @enderror"
+                            >
+                                @for ($i = 350; $i <= 420; $i++)
+                                    @php
+                                        $temperature = number_format($i / 10, 1, '.', '');
+                                        $selectedTemperature = number_format(
+                                            (float) old('body_temperature', $condition->body_temperature),
+                                            1,
+                                            '.',
+                                            ''
+                                        );
+                                    @endphp
+
+                                    <option
+                                        value="{{ $temperature }}"
+                                        {{ $selectedTemperature == $temperature ? 'selected' : '' }}
+                                    >
+                                        {{ $temperature }} ℃
+                                    </option>
+                                @endfor
+                            </select>
+
+                            @error('body_temperature')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
 
                         {{-- 体調レベル --}}
@@ -68,6 +97,60 @@
                         <div class="form-group mb-4">
                             <label for="meals_memo">食事・メモ</label>
                             <textarea name="meals_memo" id="meals_memo" class="form-control" rows="3">{{ old('meals_memo', $condition->meals_memo) }}</textarea>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="form-group mb-3">
+                            <label for="feedback">
+                                <strong>スタッフフィードバック</strong>
+                            </label>
+
+                            @if(Auth::user()->isStaff())
+
+                                <textarea
+                                    name="feedback"
+                                    id="feedback"
+                                    class="form-control @error('feedback') is-invalid @enderror"
+                                    rows="4"
+                                    maxlength="2000"
+                                    placeholder="選手のコンディションについてフィードバックを入力してください"
+                                >{{ old('feedback', $condition->feedback) }}</textarea>
+
+                                @error('feedback')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+
+                                @if($condition->feedback_by && $condition->feedbackUser)
+                                    <small class="text-muted">
+                                        前回入力：
+                                        {{ $condition->feedbackUser->name }}
+                                    </small>
+                                @endif
+
+                            @else
+
+                                @if($condition->feedback)
+                                    <div class="form-control bg-light"
+                                        style="height: auto; min-height: 80px;">
+                                        {!! nl2br(e($condition->feedback)) !!}
+                                    </div>
+
+                                    @if($condition->feedback_by && $condition->feedbackUser)
+                                        <small class="text-muted">
+                                            {{ $condition->feedbackUser->name }} より
+                                        </small>
+                                    @endif
+                                @else
+                                    <div class="form-control bg-light text-muted"
+                                        style="height: auto; min-height: 80px;">
+                                        フィードバックはありません。
+                                    </div>
+                                @endif
+
+                            @endif
                         </div>
 
                         <div class="d-flex gap-2">

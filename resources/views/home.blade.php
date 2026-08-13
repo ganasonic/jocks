@@ -1,64 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- アイコン表示用のFont Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- カスタムCSS（Bootstrapの標準カードを上書きしてモダンにするためのスタイル） -->
-<style>
-    .menu-card {
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        background-color: #ffffff;
-        border: 1px solid #f0f0f0;
-        border-radius: 12px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-        text-decoration: none !important;
-        transition: transform 0.2s, box-shadow 0.2s;
-        margin-bottom: 15px;
-        height: 86px;
-    }
-    .menu-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-    .icon-box {
-        width: 56px;
-        height: 56px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-        flex-shrink: 0;
-    }
-    .icon-box i {
-        font-size: 20px;
-    }
-    .menu-title {
-        font-size: 17px;
-        font-weight: bold;
-        color: #333333;
-        line-height: 1.2;
-    }
-    .menu-subtitle {
-        font-size: 12px;
-        color: #888888;
-        margin-top: 4px;
-        line-height: 1.2;
-    }
-    /* configから渡される背景色と文字色のカスタムマッピング */
-    .bg-orange-50  { background-color: #fff7ed; color: #ea580c; }
-    .bg-yellow-50  { background-color: #fefce8; color: #ca8a04; }
-    .bg-blue-50    { background-color: #eff6ff; color: #2563eb; }
-    .bg-teal-50    { background-color: #f0fdfa; color: #0d9488; }
-    .bg-indigo-50  { background-color: #eef2ff; color: #4f46e5; }
-    .bg-green-50   { background-color: #f0fdf4; color: #16a34a; }
-    .bg-emerald-50 { background-color: #ecfdf5; color: #059669; }
-    .bg-amber-50   { background-color: #fffbeb; color: #d97706; }
-    .bg-gray-100   { background-color: #f3f4f6; color: #4b5563; }
-</style>
 
 <div class="container">
     @auth

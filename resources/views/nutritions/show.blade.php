@@ -10,9 +10,9 @@
                 <div class="card-body">
                     <h3>日付: {{ $nutrition->nutrition_date }}</h3>
                     <p><strong>選手メモ:</strong> {{ $nutrition->daily_memo }}</p>
-                    {{-- 日ごとのコーチコメント --}}
+                    {{-- 日ごとのスタッフフィードバック --}}
                     @if(!empty($nutrition->feedback))
-                        <p><strong>コーチコメント:</strong> {{ $nutrition->feedback }}</p>
+                        <p><strong>スタッフフィードバック:</strong> {{ $nutrition->feedback }}</p>
                     @endif
                 </div>
             </div>
@@ -36,10 +36,10 @@
                         <img src="{{ asset('storage/'.$detail->photo_path) }}" style="max-width: 100%; border-radius: 5px;">
                     </div>
                     @endif
-                    {{-- 食事ごとのコーチコメント --}}
+                    {{-- 食事ごとのスタッフフィードバック --}}
                     @if(!empty($detail->feedback))
                     <div class="mt-2">
-                        <strong>コーチコメント:</strong> {{ $detail->feedback }}
+                        <strong>スタッフフィードバック:</strong> {{ $detail->feedback }}
                     </div>
                     @endif
                 </div>

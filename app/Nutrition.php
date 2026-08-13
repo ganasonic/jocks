@@ -11,6 +11,8 @@ class Nutrition extends Model
 
     protected $fillable = [
         'user_id',
+        'created_by',
+        'updated_by',
         'nutrition_date',
         'daily_memo',
         'feedback',

@@ -20,7 +20,7 @@ class Goal extends Model
         'countermeasure',
         'next_action',
         'feedback',
-        'coach_id'
+        'coach_id',
     ];
 
     /**

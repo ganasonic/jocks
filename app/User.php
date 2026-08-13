@@ -249,4 +249,29 @@ class User extends Authenticatable
     {
         return session()->has('target_player_id');
     }
+
+    /**
+     * 指定ユーザーが自分の担当選手かどうか
+     */
+    public function isAssignedPlayer($playerId)
+    {
+        // 管理者は全選手OK
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        // 自分自身ならOK
+        if ($this->id == $playerId) {
+            return true;
+        }
+
+        // スタッフでなければ他人はNG
+        if (!$this->isStaff()) {
+            return false;
+        }
+
+        return $this->players()
+            ->where('users.id', $playerId)
+            ->exists();
+    }
 }

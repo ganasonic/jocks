@@ -2,55 +2,6 @@
 
 @section('content')
 
-<style>
-    .player-menu-card {
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        background-color: #ffffff;
-        border: 1px solid #f0f0f0;
-        border-radius: 12px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-        text-decoration: none !important;
-        transition: transform 0.2s, box-shadow 0.2s;
-        margin-bottom: 15px;
-        height: 86px;
-        color: #333;
-    }
-
-    .player-menu-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-
-    .player-menu-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-        background-color: #f3f4f6;
-        flex-shrink: 0;
-    }
-
-    .player-menu-icon i {
-        font-size: 20px;
-    }
-
-    .player-menu-title {
-        font-size: 17px;
-        font-weight: bold;
-    }
-
-    .player-menu-subtitle {
-        font-size: 12px;
-        color: #888;
-        margin-top: 4px;
-    }
-</style>
-
 <div class="container">
 
     <div class="mb-4">
@@ -63,8 +14,8 @@
     <div class="row">
 
         <div class="col-12 col-sm-6 col-md-4">
-            <a href="#" class="player-menu-card">
-                <div class="player-menu-icon">
+            <a href="{{ route('conditions.index') }}" class="player-menu-card">
+                <div class="player-menu-icon bg-teal-50">
                     <i class="fas fa-heartbeat"></i>
                 </div>
                 <div>
@@ -75,8 +26,8 @@
         </div>
 
         <div class="col-12 col-sm-6 col-md-4">
-            <a href="#" class="player-menu-card">
-                <div class="player-menu-icon">
+            <a href="{{ route('goals.index') }}" class="player-menu-card">
+                <div class="player-menu-icon bg-indigo-50">
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <div>
@@ -88,7 +39,7 @@
 
         <div class="col-12 col-sm-6 col-md-4">
             <a href="{{ route('trainings.index') }}" class="player-menu-card">
-                <div class="player-menu-icon">
+                <div class="player-menu-icon bg-green-50">
                     <i class="fas fa-dumbbell"></i>
                 </div>
                 <div>
@@ -100,7 +51,7 @@
 
         <div class="col-12 col-sm-6 col-md-4">
             <a href="{{ route('practices.index') }}" class="player-menu-card">
-                <div class="player-menu-icon">
+                <div class="player-menu-icon bg-emerald-50">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
                 <div>
@@ -111,8 +62,8 @@
         </div>
 
         <div class="col-12 col-sm-6 col-md-4">
-            <a href="#" class="player-menu-card">
-                <div class="player-menu-icon">
+            <a href="{{ route('nutritions.index') }}" class="player-menu-card">
+                <div class="player-menu-icon bg-amber-50">
                     <i class="fas fa-apple-alt"></i>
                 </div>
                 <div>

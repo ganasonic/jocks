@@ -18,11 +18,21 @@ class DailyCondition extends Model
         'wakeup_time',
         'bedtime',
         'meals_memo',
+        'feedback',
+        'feedback_by',
     ];
 
     // Userモデルとのリレーション（逆方向：体調データは1つのユーザーに属する）
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * フィードバックを入力したスタッフ
+     */
+    public function feedbackUser()
+    {
+        return $this->belongsTo(User::class, 'feedback_by');
     }
 }

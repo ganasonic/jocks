@@ -108,7 +108,13 @@
                         {{-- コーチコメント欄 --}}
                         <div class="form-group mb-4 bg-light p-3 rounded border border-success">
                             <label class="form-label fw-bold text-success">コーチのコメント入力欄</label>
+                            @if(Auth::user()->isStaff())
                             <textarea name="feedback" class="form-control bg-white" rows="4" placeholder="（指導者・コーチが選手の振り返りを見てアドバイスを書き込みます）">{{ old('feedback', $goal->feedback) }}</textarea>
+                            @else
+                                <div class="form-control bg-light" style="height:auto; min-height:80px;">
+                                    {{ $goal->feedback ?: 'フィードバックはありません。' }}
+                                </div>
+                            @endif
                         </div>
 
 

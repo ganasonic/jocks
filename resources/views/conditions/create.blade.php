@@ -25,13 +25,36 @@
                         {{-- 日付 --}}
                         <div class="form-group mb-3">
                             <label for="date">記録日</label>
-                            <input type="date" name="date" id="date" class="form-control" value="{{ old('date', date('Y-m-d')) }}" required>
+                            <input type="date" name="date" id="date" class="form-control" value="{{ old('date', $date ?: date('Y-m-d')) }}" required>
                         </div>
 
                         {{-- 体温 --}}
                         <div class="form-group mb-3">
                             <label for="body_temperature">体温 (°C)</label>
-                            <input type="number" step="0.01" name="body_temperature" id="body_temperature" class="form-control" value="{{ old('body_temperature') }}" placeholder="例: 36.50">
+                            <select
+                                name="body_temperature"
+                                id="body_temperature"
+                                class="form-control @error('body_temperature') is-invalid @enderror"
+                            >
+                                @for ($i = 350; $i <= 420; $i++)
+                                    @php
+                                        $temperature = number_format($i / 10, 1, '.', '');
+                                    @endphp
+
+                                    <option
+                                        value="{{ $temperature }}"
+                                        {{ old('body_temperature', '36.4') == $temperature ? 'selected' : '' }}
+                                    >
+                                        {{ $temperature }} ℃
+                                    </option>
+                                @endfor
+                            </select>
+
+                            @error('body_temperature')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
 
                         {{-- 体調レベル --}}

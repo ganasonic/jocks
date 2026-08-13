@@ -21,9 +21,31 @@
                             <label>選手メモ</label>
                             <textarea name="daily_memo" class="form-control" rows="3">{{ $nutrition->daily_memo }}</textarea>
                         </div>
-                        <div class="form-group">
-                            <label>コーチのコメント</label>
-                            <textarea name="feedback" class="form-control" rows="3">{{ $nutrition->feedback }}</textarea>
+                        <div class="form-group mt-3">
+                            <label>
+                                <strong>スタッフフィードバック</strong>
+                            </label>
+                            @if(Auth::user()->isStaff())
+                                <textarea
+                                    name="feedback"
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="1日の食事全体についてフィードバックを入力してください"
+                                >{{ old('feedback', $nutrition->feedback) }}</textarea>
+                            @else
+                                <div
+                                    class="form-control bg-light"
+                                    style="height:auto; min-height:80px;"
+                                >
+                                    @if($nutrition->feedback)
+                                        {!! nl2br(e($nutrition->feedback)) !!}
+                                    @else
+                                        <span class="text-muted">
+                                            フィードバックはありません。
+                                        </span>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -57,8 +79,33 @@
                         </div>
 
                         <div class="form-group mt-2">
-                            <label>コーチのコメント</label>
-                            <textarea name="details[{{ $detail->id }}][feedback]" class="form-control">{{ $detail->feedback }}</textarea>
+                            <label>
+                                <strong>スタッフフィードバック</strong>
+                            </label>
+                            @if(Auth::user()->isStaff())
+                                <textarea
+                                    name="details[{{ $detail->id }}][feedback]"
+                                    class="form-control"
+                                    rows="2"
+                                    placeholder="この食事についてフィードバックを入力してください"
+                                >{{ old(
+                                    'details.' . $detail->id . '.feedback',
+                                    $detail->feedback
+                                ) }}</textarea>
+                            @else
+                                <div
+                                    class="form-control bg-light"
+                                    style="height:auto; min-height:60px;"
+                                >
+                                    @if($detail->feedback)
+                                        {!! nl2br(e($detail->feedback)) !!}
+                                    @else
+                                        <span class="text-muted">
+                                            フィードバックはありません。
+                                        </span>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
 
                         <div class="mt-2 text-end">
