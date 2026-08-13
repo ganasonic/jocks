@@ -18,6 +18,7 @@ return [
             'icon'      => 'fas fa-calendar-alt',
             'class'     => 'border-orange-100 bg-orange-50 text-orange-500',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_PLAYER,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
@@ -32,6 +33,7 @@ return [
             'icon'      => 'fas fa-calendar-check',
             'class'     => 'border-orange-100 bg-orange-50 text-orange-500',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
                 \App\User::ROLE_NUTRITIONIST,
@@ -45,6 +47,7 @@ return [
             'icon'      => 'fas fa-utensils',
             'class'     => 'border-yellow-100 bg-yellow-50 text-yellow-600',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_PLAYER,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
@@ -59,6 +62,7 @@ return [
             'icon'      => 'fas fa-bed',
             'class'     => 'border-blue-100 bg-blue-50 text-blue-500',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_PLAYER,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
@@ -73,6 +77,7 @@ return [
             'icon'      => 'fas fa-heartbeat',
             'class'     => 'border-teal-100 bg-teal-50 text-teal-500',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_PLAYER,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,

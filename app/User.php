@@ -10,6 +10,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const ROLE_GENERAL       = 0;   // 0000
     const ROLE_PLAYER        = 1;   // 0001
     const ROLE_NUTRITIONIST  = 2;   // 0010
     const ROLE_TRAINER       = 4;   // 0100
@@ -159,11 +160,20 @@ class User extends Authenticatable
     }
 
     /**
+     * 一般ユーザー
+     */
+    public function isGeneral()
+    {
+        return $this->role === self::ROLE_GENERAL;
+    }
+
+    /**
      * スタッフ判定
      */
     public function isStaff()
     {
         return $this->isCoach()
+            || $this->isGeneral()
             || $this->isTrainer()
             || $this->isNutritionist()
             || $this->isAdmin();
