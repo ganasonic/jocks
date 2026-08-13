@@ -18,9 +18,8 @@ class PlayerController extends Controller
         $staff = Auth::user();
 
         //$players = $staff->players()->orderBy('id')->get();
-        $players = User::whereRaw('(role & ?) != 0', [User::ROLE_PLAYER])
-            ->orderBy('id')
-            ->get();
+        //$players = User::whereRaw('(role & ?) != 0', [User::ROLE_PLAYER])->orderBy('id')->get();
+        $players = User::whereRaw('role = ?', [User::ROLE_PLAYER])->orderBy('id')->get();
 
         return view('players.index', compact(
             'players',
