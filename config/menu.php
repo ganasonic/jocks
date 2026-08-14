@@ -120,6 +120,7 @@ return [
             'icon'      => 'fas fa-clipboard-list',
             'class'     => 'border-emerald-100 bg-emerald-50 text-emerald-600',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_PLAYER,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
@@ -134,6 +135,7 @@ return [
             'icon'      => 'fas fa-apple-alt',
             'class'     => 'border-amber-100 bg-amber-50 text-amber-600',
             'roles' => [
+                \App\User::ROLE_GENERAL,
                 \App\User::ROLE_PLAYER,
                 \App\User::ROLE_COACH,
                 \App\User::ROLE_TRAINER,
