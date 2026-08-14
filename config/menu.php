@@ -71,7 +71,7 @@ return [
             ],
         ],
         'menu11' => [
-            'name'      => '日時管理',
+            'name'      => '体調管理',
             'sub_name'  => 'コンディショニング',
             'url'       => '/conditions',
             'icon'      => 'fas fa-heartbeat',

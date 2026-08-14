@@ -19,7 +19,7 @@
                     <i class="fas fa-heartbeat"></i>
                 </div>
                 <div>
-                    <div class="player-menu-title">日時管理</div>
+                    <div class="player-menu-title">体調管理</div>
                     <div class="player-menu-subtitle">コンディショニング</div>
                 </div>
             </a>
