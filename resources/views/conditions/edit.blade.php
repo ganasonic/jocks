@@ -61,6 +61,112 @@
                             @enderror
                         </div>
 
+                        {{-- =========================================================
+                            身体データ
+                            ========================================================= --}}
+                        <div class="card bg-light border-0 mb-4">
+                            <div class="card-body">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-heartbeat text-danger"></i>
+                                    身体データ
+                                </h5>
+
+                                {{-- 体重 --}}
+                                <div class="form-group mb-3">
+                                    <label for="body_weight">
+                                        体重 (kg)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        name="body_weight"
+                                        id="body_weight"
+                                        class="form-control"
+                                        value="{{ old('body_weight', $condition->body_weight) }}"
+                                        min="20"
+                                        max="250"
+                                        step="0.1"
+                                        inputmode="decimal"
+                                    >
+                                </div>
+
+                                <div class="row">
+                                    {{-- 心拍 --}}
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="resting_heart_rate">
+                                            安静時心拍数 (bpm)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            name="resting_heart_rate"
+                                            id="resting_heart_rate"
+                                            class="form-control"
+                                            value="{{ old('resting_heart_rate', $condition->resting_heart_rate) }}"
+                                            min="30"
+                                            max="220"
+                                        >
+                                    </div>
+
+                                    {{-- SpO2 --}}
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="spo2">
+                                            血中酸素飽和度 SpO₂ (%)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            name="spo2"
+                                            id="spo2"
+                                            class="form-control"
+                                            value="{{ old('spo2', $condition->spo2) }}"
+                                            min="70"
+                                            max="100"
+                                        >
+                                    </div>
+                                </div>
+
+                                {{-- 血圧 --}}
+                                <label>
+                                    血圧 (mmHg)
+                                </label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input
+                                            type="number"
+                                            name="systolic_blood_pressure"
+                                            class="form-control"
+                                            value="{{ old(
+                                                'systolic_blood_pressure',
+                                                $condition->systolic_blood_pressure
+                                            ) }}"
+                                            min="60"
+                                            max="250"
+                                            placeholder="上"
+                                        >
+                                        <small class="text-muted">
+                                            収縮期（上）
+                                        </small>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <input
+                                            type="number"
+                                            name="diastolic_blood_pressure"
+                                            class="form-control"
+                                            value="{{ old(
+                                                'diastolic_blood_pressure',
+                                                $condition->diastolic_blood_pressure
+                                            ) }}"
+                                            min="30"
+                                            max="150"
+                                            placeholder="下"
+                                        >
+                                        <small class="text-muted">
+                                            拡張期（下）
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- 体調レベル --}}
                         <div class="form-group mb-3">
                             <label for="condition_level">体調 (5が最高、1が最低)</label>
@@ -92,6 +198,110 @@
                                 <input type="time" name="bedtime" id="bedtime" class="form-control" value="{{ old('bedtime', $condition->bedtime ? \Carbon\Carbon::parse($condition->bedtime)->format('H:i') : '') }}">
                             </div>
                         </div>
+
+                        @if(
+                            $targetUser->userDetail &&
+                            $targetUser->userDetail->gender === 'female'
+                        )
+                            <div class="card border-danger mb-4">
+                                <div class="card-header bg-white">
+                                    <strong>
+                                        <i class="fas fa-venus text-danger"></i>
+                                        女性コンディション
+                                    </strong>
+                                </div>
+
+                                <div class="card-body">
+                                    {{-- 生理中 --}}
+                                    <div class="form-group mb-3">
+                                        <label for="menstruation">
+                                            現在、生理中ですか？
+                                        </label>
+                                        <select
+                                            name="menstruation"
+                                            id="menstruation"
+                                            class="form-control"
+                                        >
+                                            <option value="">
+                                                未入力
+                                            </option>
+                                            <option value="0"
+                                                {{ old('menstruation', $condition->menstruation) !== null &&
+                                                (string) old('menstruation', $condition->menstruation) === '0'
+                                                ? 'selected' : '' }}>
+                                                いいえ
+                                            </option>
+                                            <option value="1"
+                                                {{ (string) old('menstruation', $condition->menstruation) === '1'
+                                                ? 'selected' : '' }}>
+                                                はい
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    {{-- 開始日 --}}
+                                    <div class="form-group mb-3">
+                                        <label for="menstruation_start_date">
+                                            今回の生理開始日
+                                        </label>
+                                        <input
+                                            type="date"
+                                            name="menstruation_start_date"
+                                            id="menstruation_start_date"
+                                            class="form-control"
+                                            value="{{ old(
+                                                'menstruation_start_date',
+                                                $condition->menstruation_start_date
+                                            ) }}"
+                                        >
+                                    </div>
+
+                                    {{-- 状態 --}}
+                                    <div class="form-group mb-3">
+                                        <label for="menstruation_condition">
+                                            生理によるコンディション
+                                        </label>
+                                        <select
+                                            name="menstruation_condition"
+                                            id="menstruation_condition"
+                                            class="form-control"
+                                        >
+                                            <option value="">
+                                                未入力
+                                            </option>
+                                            @for($i = 5; $i >= 1; $i--)
+                                                <option
+                                                    value="{{ $i }}"
+                                                    {{ old(
+                                                        'menstruation_condition',
+                                                        $condition->menstruation_condition
+                                                    ) == $i ? 'selected' : '' }}
+                                                >
+                                                    {{ $i }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    {{-- メモ --}}
+                                    <div class="form-group">
+                                        <label for="menstruation_memo">
+                                            生理に関するメモ
+                                        </label>
+                                        <textarea
+                                            name="menstruation_memo"
+                                            id="menstruation_memo"
+                                            class="form-control"
+                                            rows="3"
+                                            maxlength="1000"
+                                        >{{ old(
+                                            'menstruation_memo',
+                                            $condition->menstruation_memo
+                                        ) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- 食事メモ --}}
                         <div class="form-group mb-4">

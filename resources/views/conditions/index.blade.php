@@ -12,16 +12,114 @@
             @endif
 
             {{-- 1. グラフ表示エリア (新設) --}}
+            {{-- ============================================================
+                グラフ表示エリア
+                ============================================================ --}}
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-white py-3">
-                    <h5 class="mb-0 fw-bold">📈 直近の体調推移（過去30回分）</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">
+                            📈 直近のコンディション推移
+                        </h5>
+                        <span class="text-muted small">
+                            過去30回分
+                        </span>
+                    </div>
                 </div>
+
                 <div class="card-body">
                     @if(empty($graphLabels))
-                        <p class="text-center text-muted my-4">データが蓄積されると、ここに体温と体調の推移グラフが表示されます。</p>
+                        <p class="text-center text-muted my-4">
+                            データが蓄積されると、
+                            ここにコンディションの推移グラフが表示されます。
+                        </p>
                     @else
-                        <div style="position: relative; height: 300px; width: 100%;">
-                            <canvas id="conditionChart"></canvas>
+                        {{-- ====================================================
+                            グラフ選択
+                            ==================================================== --}}
+                        <div class="condition-chart-tabs mb-4">
+                            <button type="button"
+                                    class="btn btn-primary chart-tab active"
+                                    data-chart="condition">
+                                <i class="fas fa-heartbeat"></i>
+                                体調
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-primary chart-tab"
+                                    data-chart="weight">
+                                <i class="fas fa-weight"></i>
+                                体重
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-primary chart-tab"
+                                    data-chart="circulation">
+                                <i class="fas fa-heart"></i>
+                                心拍・血圧
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-primary chart-tab"
+                                    data-chart="spo2">
+                                <i class="fas fa-lungs"></i>
+                                SpO₂
+                            </button>
+                        </div>
+
+                        {{-- ====================================================
+                            体調
+                            ==================================================== --}}
+                        <div id="chart-condition"
+                            class="condition-chart-panel">
+                            <h6 class="condition-chart-title">
+                                体温・体調レベル
+                            </h6>
+                            <div class="condition-chart-container">
+                                <canvas id="conditionChart"></canvas>
+                            </div>
+                        </div>
+
+                        {{-- ====================================================
+                            体重
+                            ==================================================== --}}
+                        <div id="chart-weight"
+                            class="condition-chart-panel"
+                            style="display:none;">
+                            <h6 class="condition-chart-title">
+                                体重
+                            </h6>
+                            <div class="condition-chart-container">
+                                <canvas id="weightChart"></canvas>
+                            </div>
+                        </div>
+
+                        {{-- ====================================================
+                            心拍・血圧
+                            ==================================================== --}}
+                        <div id="chart-circulation"
+                            class="condition-chart-panel"
+                            style="display:none;">
+                            <h6 class="condition-chart-title">
+                                安静時心拍数・血圧
+                            </h6>
+                            <div class="condition-chart-container">
+                                <canvas id="circulationChart"></canvas>
+                            </div>
+                        </div>
+
+                        {{-- ====================================================
+                            SpO2
+                            ==================================================== --}}
+                        <div id="chart-spo2"
+                            class="condition-chart-panel"
+                            style="display:none;">
+                            <h6 class="condition-chart-title">
+                                血中酸素飽和度
+                            </h6>
+                            <div class="condition-chart-container">
+                                <canvas id="spo2Chart"></canvas>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -81,6 +179,13 @@
                                                             </span>
                                                         @endif
 
+                                                        @if($dayData['data']->body_weight)
+                                                            <span class="text-secondary small fw-semibold"
+                                                                style="font-size: 0.75rem;">
+                                                                ⚖️ {{ number_format($dayData['data']->body_weight, 1) }} kg
+                                                            </span>
+                                                        @endif
+
                                                         @php
                                                             $score = $dayData['data']->condition_level;
                                                             $badgeClass = $score >= 4 ? 'bg-success' : ($score <= 2 ? 'bg-danger' : 'bg-primary');
@@ -124,63 +229,376 @@
 </style>
 
 {{-- 3. Chart.jsライブラリの読み込みとグラフスクリプト --}}
+{{-- ============================================================
+     Chart.js
+     ============================================================ --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // PHPから渡された配列データをJavaScriptの配列に展開
-        const labels = {!! json_encode($graphLabels) !!};
-        const tempData = {!! json_encode($graphTemperatures) !!};
-        const condData = {!! json_encode($graphConditions) !!};
+document.addEventListener("DOMContentLoaded", function () {
+    /*
+     * ============================================================
+     * PHP → JavaScript
+     * ============================================================
+     */
+    const labels = {!! json_encode($graphLabels) !!};
+    const tempData = {!! json_encode($graphTemperatures) !!};
+    const condData = {!! json_encode($graphConditions) !!};
+    const weightData = {!! json_encode($graphWeights) !!};
+    const heartRateData = {!! json_encode($graphHeartRates) !!};
+    const systolicData = {!! json_encode($graphSystolic) !!};
+    const diastolicData = {!! json_encode($graphDiastolic) !!};
+    const spo2Data = {!! json_encode($graphSpo2) !!};
 
-        if (labels.length === 0) return;
+    if (labels.length === 0) {
+        return;
+    }
 
-        const ctx = document.getElementById('conditionChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: '体温 (°C)',
-                        data: tempData,
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                        yAxisID: 'y-temp',
-                        tension: 0.2
-                    },
-                    {
-                        label: '体調レベル (1-5)',
-                        data: condData,
-                        borderColor: 'rgb(54, 162, 235)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        yAxisID: 'y-cond',
-                        tension: 0.2
-                    }
-                ]
+    /*
+     * ============================================================
+     * 共通設定
+     * ============================================================
+     */
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
+            legend: {
+                position: 'top'
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    'y-temp': {
-                        type: 'linear',
-                        position: 'left',
-                        min: 35.0,
-                        max: 39.0,
-                        title: { display: true, text: '体温 (°C)' }
-                    },
-                    'y-cond': {
-                        type: 'linear',
-                        position: 'right',
-                        min: 1,
-                        max: 5,
-                        ticks: { stepSize: 1 },
-                        grid: { drawOnChartArea: false }, // グリッド線が重なって見づらくなるのを防ぐ
-                        title: { display: true, text: '体調レベル' }
+            tooltip: {
+                enabled: true
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.25
+            },
+            point: {
+                radius: 4,
+                hoverRadius: 6
+            }
+        }
+    };
+
+    /*
+     * ============================================================
+     * 1. 体温・体調
+     * ============================================================
+     */
+    const conditionCanvas =
+        document.getElementById('conditionChart');
+    if (conditionCanvas) {
+        new Chart(
+            conditionCanvas.getContext('2d'),
+            {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '体温 (℃)',
+                            data: tempData,
+                            borderColor:
+                                'rgb(255, 99, 132)',
+                            backgroundColor:
+                                'rgba(255, 99, 132, 0.1)',
+                            yAxisID: 'y-temp',
+                            spanGaps: true
+                        },
+                        {
+                            label: '体調レベル',
+                            data: condData,
+                            borderColor:
+                                'rgb(54, 162, 235)',
+                            backgroundColor:
+                                'rgba(54, 162, 235, 0.1)',
+                            yAxisID: 'y-cond',
+                            spanGaps: true
+                        }
+                    ]
+                },
+
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        'y-temp': {
+                            type: 'linear',
+                            position: 'left',
+                            min: 35,
+                            max: 42,
+                            title: {
+                                display: true,
+                                text: '体温 (℃)'
+                            }
+                        },
+
+                        'y-cond': {
+                            type: 'linear',
+                            position: 'right',
+                            min: 1,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: '体調レベル'
+                            }
+                        }
                     }
                 }
             }
-        });
+        );
+    }
+
+    /*
+     * ============================================================
+     * 2. 体重
+     * ============================================================
+     */
+    const weightCanvas =
+        document.getElementById('weightChart');
+    if (weightCanvas) {
+        new Chart(
+            weightCanvas.getContext('2d'),
+            {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '体重 (kg)',
+                            data: weightData,
+                            borderColor:
+                                'rgb(75, 192, 192)',
+                            backgroundColor:
+                                'rgba(75, 192, 192, 0.1)',
+                            fill: false,
+                            spanGaps: true
+                        }
+                    ]
+                },
+
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: '体重 (kg)'
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    /*
+     * ============================================================
+     * 3. 心拍数・血圧
+     * ============================================================
+     */
+    const circulationCanvas =
+        document.getElementById('circulationChart');
+    if (circulationCanvas) {
+        new Chart(
+            circulationCanvas.getContext('2d'),
+            {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '最高血圧',
+                            data: systolicData,
+                            borderColor:
+                                'rgb(255, 99, 132)',
+                            backgroundColor:
+                                'rgba(255, 99, 132, 0.1)',
+                            yAxisID: 'y-pressure',
+                            spanGaps: true
+                        },
+
+                        {
+                            label: '最低血圧',
+                            data: diastolicData,
+                            borderColor:
+                                'rgb(54, 162, 235)',
+                            backgroundColor:
+                                'rgba(54, 162, 235, 0.1)',
+                            yAxisID: 'y-pressure',
+                            spanGaps: true
+                        },
+
+                        {
+                            label: '安静時心拍数',
+                            data: heartRateData,
+                            borderColor:
+                                'rgb(255, 159, 64)',
+                            backgroundColor:
+                                'rgba(255, 159, 64, 0.1)',
+                            yAxisID: 'y-heart',
+                            borderDash: [5, 5],
+                            spanGaps: true
+                        }
+                    ]
+                },
+
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        'y-pressure': {
+                            type: 'linear',
+                            position: 'left',
+                            suggestedMin: 40,
+                            suggestedMax: 160,
+                            title: {
+                                display: true,
+                                text: '血圧 (mmHg)'
+                            }
+                        },
+
+                        'y-heart': {
+                            type: 'linear',
+                            position: 'right',
+                            suggestedMin: 40,
+                            suggestedMax: 120,
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: '心拍数 (bpm)'
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    /*
+     * ============================================================
+     * 4. SpO2
+     * ============================================================
+     */
+    const spo2Canvas =
+        document.getElementById('spo2Chart');
+    if (spo2Canvas) {
+        new Chart(
+            spo2Canvas.getContext('2d'),
+            {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'SpO₂ (%)',
+                            data: spo2Data,
+                            borderColor:
+                                'rgb(153, 102, 255)',
+                            backgroundColor:
+                                'rgba(153, 102, 255, 0.1)',
+                            spanGaps: true
+                        }
+                    ]
+                },
+
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        y: {
+                            min: 70,
+                            max: 100,
+                            ticks: {
+                                stepSize: 5
+                            },
+                            title: {
+                                display: true,
+                                text: 'SpO₂ (%)'
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    /*
+     * ============================================================
+     * グラフ切り替え
+     * ============================================================
+     */
+    const chartTabs =
+        document.querySelectorAll('.chart-tab');
+    const chartPanels =
+        document.querySelectorAll('.condition-chart-panel');
+
+    chartTabs.forEach(function (button) {
+        button.addEventListener(
+            'click',
+            function () {
+                const target =
+                    this.dataset.chart;
+
+                /*
+                 * 全グラフを非表示
+                 */
+                chartPanels.forEach(
+                    function (panel) {
+                        panel.style.display = 'none';
+                    }
+                );
+
+                /*
+                 * 選択グラフを表示
+                 */
+                const targetPanel =
+                    document.getElementById(
+                        'chart-' + target
+                    );
+                if (targetPanel) {
+                    targetPanel.style.display =
+                        'block';
+                }
+
+                /*
+                 * ボタン表示
+                 */
+                chartTabs.forEach(
+                    function (tab) {
+                        tab.classList.remove(
+                            'btn-primary'
+                        );
+                        tab.classList.remove(
+                            'active'
+                        );
+                        tab.classList.add(
+                            'btn-outline-primary'
+                        );
+                    }
+                );
+
+                this.classList.remove(
+                    'btn-outline-primary'
+                );
+                this.classList.add(
+                    'btn-primary'
+                );
+                this.classList.add(
+                    'active'
+                );
+            }
+        );
     });
+});
 </script>
 @endsection
