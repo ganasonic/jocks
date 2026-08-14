@@ -656,3 +656,339 @@ html, body {
         font-size: 12px;
     }
 }
+
+/* ============================================================
+   シフト詳細
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   日付
+   ------------------------------------------------------------ */
+.detail-date-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border-left: 5px solid #0d6efd;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+.detail-date-header i {
+    color: #0d6efd;
+}
+
+/* ============================================================
+   項目別表示
+   ============================================================ */
+.detail-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/*
+ * 各項目カード
+ */
+.detail-summary-card {
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/*
+ * アイコン
+ */
+.detail-summary-icon {
+    padding-top: 14px;
+    font-size: 25px;
+}
+
+/*
+ * 項目名
+ */
+.detail-summary-title {
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/*
+ * 人数
+ */
+.detail-summary-count {
+    margin-top: 4px;
+    margin-bottom: 10px;
+    font-size: 23px;
+    font-weight: 700;
+}
+.detail-summary-count small {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/*
+ * 名前一覧
+ */
+.detail-summary-names {
+    min-height: 45px;
+    padding: 9px 5px;
+    background-color: rgba(0, 0, 0, 0.025);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/*
+ * 食事
+ */
+.detail-summary-card.meal
+.detail-summary-icon,
+.detail-summary-card.meal
+.detail-summary-count {
+    color: #b77900;
+}
+
+/*
+ * 出席
+ */
+.detail-summary-card.attendance
+.detail-summary-icon,
+.detail-summary-card.attendance
+.detail-summary-count {
+    color: #198754;
+}
+
+/*
+ * 宿泊
+ */
+.detail-summary-card.stay
+.detail-summary-icon,
+.detail-summary-card.stay
+.detail-summary-count {
+    color: #0d6efd;
+}
+
+/*
+ * 送迎
+ */
+.detail-summary-card.transport
+.detail-summary-icon,
+.detail-summary-card.transport
+.detail-summary-count {
+    color: #6f42c1;
+}
+
+/* ============================================================
+   コメント
+   ============================================================ */
+.detail-comment-card {
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #6c757d;
+    border-radius: 6px;
+}
+
+.detail-comment-name {
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #495057;
+}
+
+.detail-comment-text {
+    white-space: pre-wrap;
+    font-size: 14px;
+}
+
+/* ============================================================
+   メンバー別
+   ============================================================ */
+.detail-member-card {
+    margin-bottom: 14px;
+    padding: 14px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/*
+ * 名前
+ */
+.detail-member-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 12px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 17px;
+    font-weight: 700;
+    color: #333333;
+}
+
+.detail-member-name i {
+    color: #6c757d;
+    font-size: 21px;
+}
+
+/*
+ * 8項目
+ */
+.detail-member-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 7px;
+}
+
+/*
+ * 各ステータス
+ */
+.detail-member-status {
+    min-height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 2px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    color: #ced4da;
+}
+
+/*
+ * アイコン
+ */
+.detail-member-status i {
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+/*
+ * ラベル
+ */
+.detail-member-status span {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/*
+ * ON 食事
+ */
+.detail-member-status.meal.selected {
+    background-color: #fff3cd;
+    border-color: #f0ad4e;
+    color: #8a5a00;
+}
+
+/*
+ * ON 出席
+ */
+.detail-member-status.attendance.selected {
+    background-color: #d1e7dd;
+    border-color: #198754;
+    color: #146c43;
+}
+
+/*
+ * ON 宿泊
+ */
+.detail-member-status.stay.selected {
+    background-color: #cfe2ff;
+    border-color: #0d6efd;
+    color: #084298;
+}
+
+/*
+ * ON 送迎
+ */
+.detail-member-status.transport.selected {
+    background-color: #e2d9f3;
+    border-color: #6f42c1;
+    color: #59359a;
+}
+
+/*
+ * コメント
+ */
+.detail-member-comment {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    color: #495057;
+    font-size: 13px;
+    white-space: pre-wrap;
+}
+
+/* ============================================================
+   スマホ
+   ============================================================ */
+@media (max-width: 767.98px) {
+    /*
+     * 項目別
+     *
+     * 4列×2段
+     */
+    .detail-summary-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+    }
+
+    .detail-summary-icon {
+        padding-top: 10px;
+        font-size: 22px;
+    }
+
+    .detail-summary-title {
+        font-size: 12px;
+    }
+
+    .detail-summary-count {
+        font-size: 19px;
+    }
+
+    .detail-summary-names {
+        padding-left: 2px;
+        padding-right: 2px;
+        font-size: 10px;
+    }
+
+    /*
+     * メンバー別も4列×2段
+     */
+    .detail-member-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+
+    .detail-member-status {
+        min-height: 62px;
+    }
+
+    .detail-member-status i {
+        font-size: 20px;
+    }
+
+    .detail-member-status span {
+        font-size: 11px;
+    }
+
+    .detail-member-card {
+        padding: 11px;
+    }
+
+    .detail-date-header {
+        font-size: 18px;
+    }
+}
