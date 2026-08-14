@@ -191,6 +191,12 @@
         {{-- =========================================================
              当日
              ========================================================= --}}
+        <div class="shift-today-area">
+        <div class="shift-today-badge">
+            <i class="fas fa-edit"></i>
+            シフト入力する日
+        </div>
+
         <div class="row mb-3 align-items-center">
             <div class="col-12 col-md-6">
                 <h3 class="myshift-h3-color mb-2 mb-md-0">
@@ -213,7 +219,7 @@
                            value="{{ __('翌日') }}">
                     <button type="submit"
                             class="btn btn-success">
-                        {{ __('更新') }}
+                        {{ __('更新/登録') }}
                     </button>
                 </div>
             </div>
@@ -409,6 +415,7 @@
                     </label>
                 </div>
             </div>
+        </div>
         </div>
 
         {{-- =========================================================
