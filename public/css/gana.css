@@ -1091,3 +1091,121 @@ html, body {
         height: 280px;
     }
 }
+/* ============================================================
+   食事確認・宿泊確認
+   ============================================================ */
+.shift-summary-table {
+    background-color: #fff;
+}
+
+/*
+ * 本人列
+ */
+.my-status-header {
+    background-color: #eef6ff !important;
+    color: #0d6efd;
+}
+
+/*
+ * 今日
+ */
+.today-row {
+    background-color: #f5f9ff !important;
+}
+.today-row td {
+    border-top: 2px solid #86b7fe;
+    border-bottom: 2px solid #86b7fe;
+}
+
+/* ============================================================
+   食事アイコン
+   ============================================================ */
+.meal-status-icons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.meal-status-item {
+    width: 44px;
+    min-height: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #c3c7cb;
+    font-size: 11px;
+}
+
+.meal-status-item i {
+    font-size: 18px;
+    margin-bottom: 3px;
+}
+
+/*
+ * 食事あり
+ */
+.meal-status-item.active {
+    background-color: #fff3cd;
+    border-color: #f0ad4e;
+    color: #8a5a00;
+}
+
+/* ============================================================
+   宿泊
+   ============================================================ */
+.stay-status-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 70px;
+    padding: 7px 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 9px;
+    background-color: #f8f9fa;
+    color: #adb5bd;
+    font-size: 11px;
+}
+
+.stay-status-item i {
+    font-size: 21px;
+    margin-bottom: 3px;
+}
+
+/*
+ * 宿泊あり
+ */
+.stay-status-item.active {
+    background-color: #cfe2ff;
+    border-color: #0d6efd;
+    color: #084298;
+}
+
+/* ============================================================
+   スマホ
+   ============================================================ */
+@media (max-width: 767.98px) {
+    .shift-summary-table {
+        font-size: 13px;
+    }
+    .meal-status-icons {
+        gap: 4px;
+    }
+    .meal-status-item {
+        width: 34px;
+        min-height: 46px;
+        padding: 3px 1px;
+        font-size: 9px;
+    }
+    .meal-status-item i {
+        font-size: 16px;
+    }
+    .stay-status-item {
+        min-width: 55px;
+        padding: 5px;
+    }
+}

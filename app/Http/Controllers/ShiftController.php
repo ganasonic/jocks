@@ -556,9 +556,19 @@ class ShiftController extends Controller
                 ->with('user')
                 ->get();
 
+            // ログイン本人のシフト
+            $myShift = $shifts->firstWhere('user_id', $user->id);
+
             $meals[] = [
                 'date' => $shiftDate,
                 'weekday' => $this->getWeek($shiftDate),
+                // 本人
+                'mine' => [
+                    'breakfast' => $myShift ? (int)$myShift->breakfast : 0,
+                    'lunch'     => $myShift ? (int)$myShift->lunch : 0,
+                    'dinner'    => $myShift ? (int)$myShift->dinner : 0,
+                ],
+                // 全体集計
                 'totals' => [
                     'breakfast' => $shifts->where('breakfast', 1)->count(),
                     'lunch'     => $shifts->where('lunch', 1)->count(),
@@ -696,9 +706,17 @@ class ShiftController extends Controller
                 ->with('user')
                 ->get();
 
+            // ログイン本人
+            $myShift = $shifts->firstWhere('user_id', $user->id);
+
             $stays[] = [
                 'date' => $shiftDate,
                 'weekday' => $this->getWeek($shiftDate),
+                // 本人
+                'mine' => [
+                    'stay' => $myShift ? (int)$myShift->stay : 0,
+                ],
+                // 全体
                 'total' => $shifts->where('stay', 1)->count(),
             ];
         }
