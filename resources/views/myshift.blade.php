@@ -194,7 +194,7 @@
         <div class="shift-today-area">
         <div class="shift-today-badge">
             <i class="fas fa-edit"></i>
-            シフト入力する日
+            シフト登録日
         </div>
 
         <div class="row mb-3 align-items-center">
