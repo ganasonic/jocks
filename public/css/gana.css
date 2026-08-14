@@ -334,3 +334,243 @@ html, body {
     background-color: #f3f4f6;
     color: #4b5563;
 }
+
+/* ============================================================
+   マイシフト
+   アイコン選択UI
+   ============================================================ */
+
+/*
+ * アイコンのグリッド
+ *
+ * スマホ：
+ * 4列 × 2段
+ */
+.shift-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+/*
+ * checkboxそのものは画面から隠す
+ *
+ * display:none にはせず、
+ * labelから操作できる状態を維持する
+ */
+.shift-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/*
+ * アイコンボタン共通
+ */
+.shift-icon-item {
+    width: 100%;
+    min-height: 105px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 4px;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    color: #6c757d;
+    text-align: center;
+    box-sizing: border-box;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.1s ease;
+}
+
+/*
+ * タップ可能な当日ボタン
+ */
+.shift-icon-button {
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * アイコン
+ */
+.shift-icon-item i {
+    display: block;
+    font-size: 28px;
+    margin-bottom: 6px;
+    line-height: 1;
+}
+
+/*
+ * 朝食などの項目名
+ */
+.shift-icon-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/*
+ * あり・なし / 出席・欠席 / 必要・不要
+ */
+.shift-icon-state {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/*
+ * タップ時
+ */
+.shift-icon-button:active {
+    transform: scale(0.96);
+}
+
+/*
+ * ============================================================
+ * 食事
+ * ============================================================
+ */
+.shift-icon-item.meal.selected {
+    background-color: #fff3cd;
+    border-color: #f0ad4e;
+    color: #8a5a00;
+}
+
+/*
+ * ============================================================
+ * 午前・午後
+ * ============================================================
+ */
+.shift-icon-item.attendance.selected {
+    background-color: #d1e7dd;
+    border-color: #198754;
+    color: #146c43;
+}
+
+/*
+ * ============================================================
+ * 宿泊
+ * ============================================================
+ */
+.shift-icon-item.stay.selected {
+    background-color: #cfe2ff;
+    border-color: #0d6efd;
+    color: #084298;
+}
+
+/*
+ * ============================================================
+ * 送迎
+ * ============================================================
+ */
+.shift-icon-item.transport.selected {
+    background-color: #e2d9f3;
+    border-color: #6f42c1;
+    color: #59359a;
+}
+
+/*
+ * ============================================================
+ * OFF状態
+ * ============================================================
+ */
+.shift-icon-button:not(.selected) {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #adb5bd;
+}
+
+/*
+ * hoverはマウスのある端末のみ
+ */
+@media (hover: hover) {
+    .shift-icon-button:hover {
+        border-color: #adb5bd;
+        background-color: #f1f3f5;
+    }
+    .shift-icon-button.selected:hover {
+        filter: brightness(0.97);
+    }
+}
+
+/*
+ * ============================================================
+ * 前日・翌日
+ * ============================================================
+ */
+.shift-icon-grid-readonly .shift-icon-item {
+    min-height: 85px;
+    opacity: 0.9;
+}
+
+/*
+ * OFF状態はさらに薄くする
+ */
+.shift-icon-grid-readonly
+.shift-icon-item:not(.selected) {
+    opacity: 0.45;
+}
+
+/*
+ * 前日・翌日のコメント
+ */
+.shift-comment-readonly {
+    padding: 10px 12px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #ced4da;
+    border-radius: 4px;
+    white-space: pre-wrap;
+}
+
+/*
+ * ============================================================
+ * スマホ
+ * ============================================================
+ */
+@media (max-width: 767.98px) {
+    .shift-icon-grid {
+        gap: 7px;
+    }
+    .shift-icon-item {
+        min-height: 95px;
+        padding: 8px 2px;
+        border-radius: 10px;
+    }
+    .shift-icon-item i {
+        font-size: 25px;
+        margin-bottom: 5px;
+    }
+    .shift-icon-label {
+        font-size: 13px;
+    }
+    .shift-icon-state {
+        font-size: 10px;
+    }
+    .shift-icon-grid-readonly .shift-icon-item {
+        min-height: 78px;
+    }
+}
+
+/*
+ * ============================================================
+ * PC
+ *
+ * PCでは横に8個並べる
+ * ============================================================
+ */
+@media (min-width: 768px) {
+    .shift-icon-grid {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
