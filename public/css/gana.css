@@ -992,3 +992,46 @@ html, body {
         font-size: 18px;
     }
 }
+
+/* ============================================================
+   プロフィール
+   ============================================================ */
+.profile-row {
+    display: flex;
+    padding: 14px 4px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-label {
+    width: 150px;
+    flex-shrink: 0;
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profile-value {
+    flex: 1;
+    color: #333333;
+    font-size: 15px;
+    word-break: break-word;
+}
+
+/* スマホ */
+@media (max-width: 575.98px) {
+    .profile-row {
+        display: block;
+    }
+    .profile-label {
+        width: auto;
+        margin-bottom: 4px;
+        font-size: 12px;
+    }
+    .profile-value {
+        font-size: 15px;
+    }
+}

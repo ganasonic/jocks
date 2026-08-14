@@ -11,6 +11,10 @@ class UserDetail extends Model
         'user_id',
         'birthdate',
         'affiliation',
+        'team_name',
+        'gender',
+        'phone',
+        'line_id',
     ];
 
     // Userモデルとのリレーション（逆方向：詳細は1つのユーザーに属する）

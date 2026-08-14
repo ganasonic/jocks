@@ -64,8 +64,13 @@ Route::middleware('auth'/*,'staff'*/)->group(function () {
     });
     // プロフィール機能のルーティング
     Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', 'UserDetailController@show')->name('show');     // プロフィール表示・編集画面
-        Route::post('/', 'UserDetailController@update')->name('update'); // 保存・更新処理
+        // 表示
+        Route::get('/', 'UserDetailController@show')->name('show');
+        // 編集
+        Route::get('/edit', 'UserDetailController@edit')->name('edit');
+        // 更新
+        Route::post('/', 'UserDetailController@update')->name('update');
+
     });
 
     // 目標管理（PDCA）機能のルーティング

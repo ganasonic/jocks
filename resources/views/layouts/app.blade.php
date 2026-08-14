@@ -80,10 +80,8 @@
                                         {{ Auth::user()->name }}
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <!--
-                                        <li><a class="dropdown-item" href="/profile">プロフィール</a></li>
-                                        -->
-                                        <li><a class="dropdown-item" href="/password/reset">パスワード変更</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('profile.show') }}"><i class="fas fa-user me-2"></i>プロフィール</a></li>
+                                        <li><a class="dropdown-item" href="/password/reset"><i class="fas fa-key me-2"></i>パスワード変更</a></li>
                                         <li>
                                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }}

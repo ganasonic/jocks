@@ -1,58 +1,132 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            {{-- 更新成功時のメッセージ --}}
-            @if (session('status'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="col-md-8 col-lg-7">
+            @if(session('status'))
+                <div class="alert alert-success alert-dismissible fade show"
+                     role="alert">
                     {{ session('status') }}
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                    </button>
                 </div>
             @endif
 
-            <div class="card">
-                <div class="card-header">プロフィール設定</div>
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <strong>
+                        <i class="fas fa-user me-2"></i>
+                        プロフィール
+                    </strong>
+                    <a href="{{ route('profile.edit') }}"
+                       class="btn btn-primary btn-sm">
+                        <i class="fas fa-pen me-1"></i>
+                        編集
+                    </a>
+                </div>
 
-                <div class="card-body p-4">
-                    {{-- エラー表示 --}}
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                <div class="card-body">
+                    {{-- アカウント名 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            アカウント名
                         </div>
-                    @endif
-
-                    <form action="{{ route('profile.update') }}" method="POST">
-                        @csrf
-
-                        {{-- ユーザー名（usersテーブルから取得・編集不可） --}}
-                        <div class="form-group mb-3">
-                            <label class="form-label text-muted">アカウント名</label>
-                            <input type="text" class="form-control bg-light" value="{{ Auth::user()->name }}" disabled>
-                            <small class="text-muted">※アカウント名は変更できません。</small>
+                        <div class="profile-value">
+                            {{ $user->name }}
                         </div>
+                    </div>
 
-                        {{-- 生年月日 --}}
-                        <div class="form-group mb-3">
-                            <label for="birthdate" class="form-label">生年月日</label>
-                            <input type="date" name="birthdate" id="birthdate" class="form-control"
-                                   value="{{ old('birthdate', $userDetail->birthdate) }}">
+                    {{-- メールアドレス --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            メールアドレス
                         </div>
-
-                        {{-- 所属 --}}
-                        <div class="form-group mb-4">
-                            <label for="affiliation" class="form-label">所属（チーム・学校・企業など）</label>
-                            <input type="text" name="affiliation" id="affiliation" class="form-control"
-                                   placeholder="例: サッカー部、〇〇株式会社"
-                                   value="{{ old('affiliation', $userDetail->affiliation) }}">
+                        <div class="profile-value">
+                            {{ $user->email }}
                         </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary w-100">プロフィールを更新する</button>
-                    </form>
+                    {{-- 権限 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            ユーザー種別
+                        </div>
+                        <div class="profile-value">
+                            {{ $user->role_name }}
+                        </div>
+                    </div>
+
+                    {{-- 生年月日 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            生年月日
+                        </div>
+                        <div class="profile-value">
+                            {{ $userDetail->birthdate ?: '未設定' }}
+                        </div>
+                    </div>
+
+                    {{-- 所属 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            所属
+                        </div>
+                        <div class="profile-value">
+                            {{ $userDetail->affiliation ?: '未設定' }}
+                        </div>
+                    </div>
+
+                    {{-- チーム名 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            チーム名
+                        </div>
+                        <div class="profile-value">
+                            {{ $userDetail->team_name ?: '未設定' }}
+                        </div>
+                    </div>
+
+                    {{-- 性別 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            性別
+                        </div>
+                        <div class="profile-value">
+                            @if($userDetail->gender === 'male')
+                                男性
+                            @elseif($userDetail->gender === 'female')
+                                女性
+                            @elseif($userDetail->gender === 'other')
+                                その他
+                            @elseif($userDetail->gender === 'private')
+                                回答しない
+                            @else
+                                未設定
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- 電話番号 --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            電話番号
+                        </div>
+                        <div class="profile-value">
+                            {{ $userDetail->phone ?: '未設定' }}
+                        </div>
+                    </div>
+
+                    {{-- LINE ID --}}
+                    <div class="profile-row">
+                        <div class="profile-label">
+                            LINE ID
+                        </div>
+                        <div class="profile-value">
+                            {{ $userDetail->line_id ?: '未設定' }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

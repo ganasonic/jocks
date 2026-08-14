@@ -21,10 +21,30 @@ class UserDetailController extends Controller
      */
     public function show()
     {
-        // ログインユーザーに紐づくプロフィールを取得（なければ空のインスタンスを作成）
-        $userDetail = Auth::user()->userDetail ?? new UserDetail();
+        $user = Auth::user();
 
-        return view('user_details.show', compact('userDetail'));
+        // ログインユーザーに紐づくプロフィールを取得（なければ空のインスタンスを作成）
+        $userDetail = $user->userDetail ?? new UserDetail();
+
+        return view('user_details.show', compact(
+            'user',
+            'userDetail'
+        ));
+    }
+
+    /**
+     * プロフィール編集画面
+     */
+    public function edit()
+    {
+        $user = Auth::user();
+
+        $userDetail = $user->userDetail ?? new UserDetail();
+
+        return view('user_details.edit', compact(
+            'user',
+            'userDetail'
+        ));
     }
 
     /**
@@ -34,8 +54,12 @@ class UserDetailController extends Controller
     {
         // 入力データのバリデーション
         $validated = $request->validate([
-            'birthdate' => 'nullable|date|before:today',
+            'birthdate'   => 'nullable|date|before:today',
             'affiliation' => 'nullable|string|max:100',
+            'team_name'   => 'nullable|string|max:100',
+            'gender'      => 'nullable|in:male,female,other,private',
+            'phone'       => 'nullable|string|max:30',
+            'line_id'     => 'nullable|string|max:100',
         ]);
 
         // すでにデータがあれば更新（update）、なければ新規作成（create）を自動判別
