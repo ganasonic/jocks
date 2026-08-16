@@ -89,7 +89,9 @@
                                             <hr class="dropdown-divider">
                                         </li>
                                     @endif
+                                    @if(false)
                                         <li><a class="dropdown-item" href="/password/reset"><i class="fas fa-key me-2"></i>パスワード変更</a></li>
+                                    @endif
                                         <li>
                                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }}
