@@ -154,6 +154,86 @@
                                    value="{{ old('line_id', $userDetail->line_id) }}">
                         </div>
 
+                        {{-- ============================================================
+                            パスワード変更
+                            ============================================================ --}}
+                        <hr class="my-4">
+                        <div class="card border-warning mb-4">
+                            <div class="card-header bg-warning-subtle">
+                                <strong>
+                                    <i class="fas fa-key me-2"></i>
+                                    パスワード変更
+                                </strong>
+                            </div>
+
+                            <div class="card-body">
+                                <p class="text-muted small mb-3">
+                                    パスワードを変更しない場合は、
+                                    以下の項目はすべて空欄のままにしてください。
+                                </p>
+
+                                {{-- 現在のパスワード --}}
+                                <div class="mb-3">
+                                    <label for="current_password"
+                                        class="form-label">
+                                        現在のパスワード
+                                    </label>
+                                    <input type="password"
+                                        name="current_password"
+                                        id="current_password"
+                                        class="form-control
+                                            @error('current_password')
+                                                is-invalid
+                                            @enderror"
+                                        autocomplete="current-password">
+                                    @error('current_password')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                {{-- 新しいパスワード --}}
+                                <div class="mb-3">
+                                    <label for="password"
+                                        class="form-label">
+                                        新しいパスワード
+                                    </label>
+                                    <input type="password"
+                                        name="password"
+                                        id="password"
+                                        class="form-control
+                                            @error('password')
+                                                is-invalid
+                                            @enderror"
+                                        minlength="8"
+                                        autocomplete="new-password">
+                                    <div class="form-text">
+                                        8文字以上で入力してください。
+                                    </div>
+                                    @error('password')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                {{-- 新しいパスワード確認 --}}
+                                <div class="mb-0">
+                                    <label for="password_confirmation"
+                                        class="form-label">
+                                        新しいパスワード（確認）
+                                    </label>
+                                    <input type="password"
+                                        name="password_confirmation"
+                                        id="password_confirmation"
+                                        class="form-control"
+                                        minlength="8"
+                                        autocomplete="new-password">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="d-flex gap-2">
                             <button type="submit"
                                     class="btn btn-primary">

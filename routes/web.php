@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-Auth::routes();
+//Auth::routes();
+Auth::routes([
+    'reset' => false,
+]);
 
 Route::middleware('auth'/*,'staff'*/)->group(function () {
 
