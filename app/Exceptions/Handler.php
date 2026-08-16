@@ -59,6 +59,12 @@ class Handler extends ExceptionHandler
                     ->route('login')
                     ->with('status', 'セッションの有効期限が切れました。再度ログインしてください。');
             }
+            if ($request->is('login')) {
+                return redirect()
+                    ->route('login')
+                    ->with('status', 'ログイン画面の有効期限が切れました。もう一度ログインしてください。');
+            }
+
         }
         return parent::render($request, $exception);
     }
