@@ -10,6 +10,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    // =========================================
+    // アプリ内権限
+    // =========================================
     const ROLE_GENERAL       = 0;   // 0000
     const ROLE_PLAYER        = 1;   // 0001
     const ROLE_NUTRITIONIST  = 2;   // 0010
@@ -17,14 +20,27 @@ class User extends Authenticatable
     const ROLE_COACH         = 8;   // 1000
     const ROLE_ADMIN         = 15;  // 1111
 
+    // =========================================
+    // メンバー区分
+    // =========================================
+    const MEMBER_STAFF      = 1;
+    const MEMBER_TEMP       = 2;
+    const MEMBER_GUEST      = 3;
+    const MEMBER_PLAYER     = 4;
+    const MEMBER_GUARDIAN   = 5;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role',
-    ];
+        'name',
+        'email',
+        'password',
+        'role',
+        'member_type',
+];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -209,7 +225,11 @@ class User extends Authenticatable
             return '管理栄養士';
         }
 
-        return '選手';
+        if ($this->isPlayer()) {
+            return '選手';
+        }
+
+        return '一般';
     }
 
     /**
@@ -218,6 +238,7 @@ class User extends Authenticatable
     public static function roles()
     {
         return [
+            self::ROLE_GENERAL      => '一般',
             self::ROLE_PLAYER       => '選手',
             self::ROLE_NUTRITIONIST => '管理栄養士',
             self::ROLE_TRAINER      => 'トレーナー',
@@ -284,4 +305,31 @@ class User extends Authenticatable
             ->where('users.id', $playerId)
             ->exists();
     }
+
+    /**
+     * メンバー区分一覧
+     */
+    public static function memberTypes()
+    {
+        return [
+            self::MEMBER_STAFF     => 'スタッフ',
+            self::MEMBER_TEMP      => '臨時',
+            self::MEMBER_GUEST     => 'ゲスト',
+            self::MEMBER_PLAYER    => '選手',
+            self::MEMBER_GUARDIAN  => '保護者',
+        ];
+    }
+
+    /**
+     * メンバー区分名
+     */
+    public function getMemberTypeNameAttribute()
+    {
+        $types = self::memberTypes();
+
+        return isset($types[$this->member_type])
+            ? $types[$this->member_type]
+            : '未設定';
+    }
+
 }

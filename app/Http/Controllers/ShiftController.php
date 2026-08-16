@@ -384,7 +384,15 @@ class ShiftController extends Controller
         $shift_date = $today;
 
         // 既存のシフトを取得
-        $shifts = Shift::where('shift_date', $today)->with('user')->get();
+        //$shifts = Shift::where('shift_date', $today)->with('user')->orderBy('user_id', 'asc')->get();
+        $shifts = Shift::where('shift_date', $today)
+            ->join('users', 'shifts.user_id', '=', 'users.id')
+            ->with('user')
+            ->orderBy('users.member_type', 'asc')
+            ->orderBy('users.id', 'asc')
+            ->select('shifts.*')
+            ->get();
+
         //dd($shifts);
         if(!$shifts){
             $title = "エラー";

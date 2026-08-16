@@ -138,4 +138,21 @@ Route::middleware('auth'/*,'staff'*/)->group(function () {
     // 選手選択後のメニュー
     Route::get('/players/{player}', 'PlayerController@show')
         ->name('players.show');
+
+    // =========================================
+    // 管理者専用 ユーザー管理
+    // =========================================
+    Route::prefix('admin/users')
+        ->name('admin.users.')
+        ->group(function () {
+            Route::get('/', 'AdminUserController@index')
+                ->name('index');
+
+            Route::get('/{user}/edit', 'AdminUserController@edit')
+                ->name('edit');
+
+            Route::patch('/{user}', 'AdminUserController@update')
+                ->name('update');
+        });
+
 });

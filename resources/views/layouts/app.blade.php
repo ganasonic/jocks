@@ -81,6 +81,14 @@
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" href="{{ route('profile.show') }}"><i class="fas fa-user me-2"></i>プロフィール</a></li>
+                                    @if(Auth::user()->isAdmin())
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('admin.users.index') }}"><i class="fas fa-users-cog me-2"></i>ユーザー管理</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                    @endif
                                         <li><a class="dropdown-item" href="/password/reset"><i class="fas fa-key me-2"></i>パスワード変更</a></li>
                                         <li>
                                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
