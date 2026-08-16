@@ -22,9 +22,11 @@
                         <tr>
                             <th>ID</th>
                             <th>名前</th>
+                            <!--
                             <th>メール</th>
+                            -->
                             <th>権限</th>
-                            <th>メンバー区分</th>
+                            <th>区分</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -38,9 +40,11 @@
                                 <td class="fw-bold">
                                     {{ $user->name }}
                                 </td>
+                            <!--
                                 <td>
                                     {{ $user->email }}
                                 </td>
+                            -->
                                 <td>
                                     <span class="badge bg-secondary">
                                         {{ $user->role_name }}
