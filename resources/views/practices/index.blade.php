@@ -252,6 +252,7 @@
 
                                                     </div>
                                                 @endif
+                                                @include('practices.partials.videos', ['paths' => \App\Services\PracticeVideos::paths($detail->video_url)])
 
                                             </td>
 
@@ -380,6 +381,7 @@
                                     </div>
 
                                 @endif
+                                @include('practices.partials.videos', ['paths' => \App\Services\PracticeVideos::paths($detail->video_url)])
 
                             </div>
 

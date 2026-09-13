@@ -72,16 +72,11 @@
 
                 @if($detail->feedback)
                     <div class="p-2 bg-success-subtle text-success rounded fs-7 mb-2">
-                        <strong>アドバイス（コーチ）:</strong> {{ $detail->feedback }}
+                        <strong>アドバイス（コーチコメント）:</strong> {{ $detail->feedback }}
                     </div>
                 @endif
 
-                @if($detail->video_url)
-                    <div class="fs-7">
-                        <i class="bi bi-camera-video"></i> <strong>動画URL:</strong>
-                        <a href="{{ $detail->video_url }}" target="_blank" rel="noopener noreferrer">{{ $detail->video_url }}</a>
-                    </div>
-                @endif
+                @include('practices.partials.videos', ['paths' => \App\Services\PracticeVideos::paths($detail->video_url)])
             </div>
         </div>
     @empty

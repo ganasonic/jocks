@@ -9,6 +9,10 @@
 
     <form action="{{ route('practices.update', $practice->id) }}" method="POST">
         @csrf
+        <input type="hidden" name="player_id" value="{{ auth()->user()->targetPlayerId() }}">
+        @if($errors->any())
+            <div class="alert alert-danger"><ul class="mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+        @endif
         @method('PATCH')
 
         <div class="card shadow-sm border-light-subtle mb-4">
@@ -59,77 +63,15 @@
         </div>
 
         <h3 class="h5 fw-bold mb-3">練習メニュー</h3>
+        @php($detailRows = old('details', $practice->details->map(function ($detail) { $data = $detail->toArray(); $data['video_url'] = \App\Services\PracticeVideos::paths($detail->video_url); return $data; })->all()))
         <div id="details-container">
-            @foreach($practice->details as $index => $detail)
-            <input type="hidden" name="details[{{ $index }}][id]" value="{{ $detail->id }}">
-            <div class="card shadow-sm border-light-subtle mb-3 detail-item">
-                <div class="card-body p-3">
-                    <div class="row g-2 mb-2">
-                        <div class="col-md-4">
-                            <label class="form-label fs-7 fw-bold">メニュー名 <span class="text-danger">*</span></label>
-                            <input type="text" name="details[{{ $index }}][menu_name]" class="form-control form-control-sm" value="{{ old("details.{$index}.menu_name", $detail->menu_name) }}" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label fs-7 fw-bold">本数/時間</label>
-                            <select name="details[{{ $index }}][runs_or_time]" class="form-select form-select-sm">
-                                <option value="">選択</option>
-                                @foreach(['1本', '3本', '5本', '10本', '15本', '20本', '5分', '10分', '15分', '20分', '30分', '60分'] as $val)
-                                    <option value="{{ $val }}" {{ old("details.{$index}.runs_or_time", $detail->runs_or_time) == $val ? 'selected' : '' }}>{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fs-7 fw-bold">本人達成度</label>
-                            <select name="details[{{ $index }}][rating]" class="form-select form-select-sm">
-                                <option value="">選択なし</option>
-                                @for($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}" {{ old("details.{$index}.rating", $detail->rating) == $i ? 'selected' : '' }}>{{ $i }} ({{ str_repeat('★', $i) }})</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fs-7 fw-bold text-primary">コーチ達成度</label>
-                            @if(Auth::user()->isStaff())
-                            <select name="details[{{ $index }}][coach_rating]" class="form-select form-select-sm border-primary">
-                                <option value="">選択なし</option>
-                                @for($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}" {{ old("details.{$index}.coach_rating", $detail->coach_rating) == $i ? 'selected' : '' }}>{{ $i }} ({{ str_repeat('★', $i) }})</option>
-                                @endfor
-                            </select>
-                            @else
-                            <div>
-                                @if($detail->coach_rating)
-                                    {{ $detail->coach_rating }}
-                                    （{{ str_repeat('★', $detail->coach_rating) }}）
-                                @else
-                                    -
-                                @endif
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="row g-2 mb-2">
-                        <div class="col-md-6"><label class="form-label fs-7">感触・自己評価</label><textarea name="details[{{ $index }}][impression]" class="form-control form-control-sm" rows="2">{{ old("details.{$index}.impression", $detail->impression) }}</textarea></div>
-                        <div class="col-md-6"><label class="form-label fs-7">課題・反省</label><textarea name="details[{{ $index }}][notice]" class="form-control form-control-sm" rows="2">{{ old("details.{$index}.notice", $detail->notice) }}</textarea></div>
-                    </div>
-
-                    <div class="row g-2">
-                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label>
-                        @if(Auth::user()->isStaff())
-                            <textarea name="details[{{ $index }}][feedback]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2">{{ old("details.{$index}.feedback", $detail->feedback) }}</textarea>
-                        @else
-                            <div class="form-control bg-light" style="height:auto; min-height:60px;">
-                                {{ $detail->feedback ?: 'フィードバックはありません。' }}
-                            </div>
-                        @endif
-                    </div>
-                        <div class="col-md-4"><label class="form-label fs-7">動画URL</label><input type="url" name="details[{{ $index }}][video_url]" class="form-control form-control-sm" value="{{ old("details.{$index}.video_url", $detail->video_url) }}"></div>
-                    </div>
-                </div>
-            </div>
+            @foreach($detailRows as $index => $row)
+                @include('practices.partials.detail-form', ['index' => $index, 'row' => $row])
             @endforeach
         </div>
+        <template id="detail-template">
+            @include('practices.partials.detail-form', ['index' => '__INDEX__', 'row' => []])
+        </template>
 
         <button type="button" id="add-detail-btn" class="btn btn-outline-primary fw-bold mb-4">＋ メニュー追加</button>
 
@@ -139,17 +81,5 @@
     </form>
 </div>
 
-<script>
-    let detailIndex = {{ count($practice->details) }};
-    document.getElementById('add-detail-btn').addEventListener('click', function() {
-        const container = document.getElementById('details-container');
-        const template = container.firstElementChild.cloneNode(true);
-        template.querySelectorAll('input, textarea, select').forEach(el => {
-            el.name = el.name.replace(/details\[\d+\]/, `details[${detailIndex}]`);
-            el.value = '';
-        });
-        container.appendChild(template);
-        detailIndex++;
-    });
-</script>
+@include('practices.partials.upload-script')
 @endsection

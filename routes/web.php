@@ -96,6 +96,13 @@ Route::middleware('auth'/*,'staff'*/)->group(function () {
         Route::patch('/{training}', 'TrainingController@update')->name('update'); // 更新処理
     });
 
+    Route::prefix('practice-videos')->name('practice-videos.')->group(function () {
+        Route::post('/', 'PracticeVideoController@start')->name('start')->middleware('throttle:30,1');
+        Route::post('/{token}/chunks', 'PracticeVideoController@chunk')->name('chunk');
+        Route::post('/{token}/complete', 'PracticeVideoController@complete')->name('complete');
+        Route::get('/{token}', 'PracticeVideoController@stream')->name('stream');
+    });
+
     // 練習管理機能のルーティング
     Route::prefix('practices')->name('practices.')->group(function () {
         Route::get('/', 'PracticeController@index')->name('index');

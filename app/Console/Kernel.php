@@ -24,6 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('practice-videos:cleanup')->hourly()->withoutOverlapping();
+
         // $schedule->command('inspire')
         //          ->hourly();
     }

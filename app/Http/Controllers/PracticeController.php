@@ -4,12 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Practice;
 use App\PracticeDetail;
+use App\Services\PracticeVideos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
 class PracticeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            PracticeVideos::authorizePlayer(auth()->user()->targetPlayerId());
+            if ($request->isMethod('post') || $request->isMethod('patch') || $request->isMethod('put')) {
+                abort_unless((int) $request->input('player_id') === (int) auth()->user()->targetPlayerId(), 409,
+                    '操作対象の選手が変わりました。画面を開き直してください。');
+            }
+            return $next($request);
+        });
+    }
+
     /**
      * 一覧表示
      */
@@ -75,7 +88,9 @@ class PracticeController extends Controller
             'details.*.impression'    => 'nullable|string',
             'details.*.notice'        => 'nullable|string',
             'details.*.feedback'      => 'nullable|string',
-            'details.*.video_url'     => 'nullable|url',
+            'details.*.video_url'     => 'nullable|array|max:' . config('practice_video.max_files'),
+            'details.*.video_url.*'   => 'required|string|max:2048',
+            'details.*.id' => 'nullable|integer',
         ]);
 
         $user = Auth::user();
@@ -114,7 +129,6 @@ class PracticeController extends Controller
                         'rating'       => $detailData['rating'] ?? null,
                         'impression'   => $detailData['impression'] ?? null,
                         'notice'       => $detailData['notice'] ?? null,
-                        'video_url'    => $detailData['video_url'] ?? null,
                     ];
 
                     if ($user->isStaff()) {
@@ -122,7 +136,8 @@ class PracticeController extends Controller
                         $data['feedback']     = $detailData['feedback'] ?? null;
                     }
 
-                    $practice->details()->create($data);
+                    $detail = $practice->details()->create($data);
+                    PracticeVideos::attach($detail, $detailData['video_url'] ?? [], $targetPlayerId);
                 }
             }
         });
@@ -203,7 +218,9 @@ class PracticeController extends Controller
             'details.*.impression'    => 'nullable|string',
             'details.*.notice'        => 'nullable|string',
             'details.*.feedback'      => 'nullable|string',
-            'details.*.video_url'     => 'nullable|url',
+            'details.*.video_url'     => 'nullable|array|max:' . config('practice_video.max_files'),
+            'details.*.video_url.*'   => 'required|string|max:2048',
+            'details.*.id' => 'nullable|integer',
         ]);
 
         $user = Auth::user();
@@ -246,7 +263,6 @@ class PracticeController extends Controller
                         'rating'       => $detailData['rating'] ?? null,
                         'impression'   => $detailData['impression'] ?? null,
                         'notice'       => $detailData['notice'] ?? null,
-                        'video_url'    => $detailData['video_url'] ?? null,
                     ];
 
                     // スタッフだけコーチ側項目を更新
@@ -262,9 +278,11 @@ class PracticeController extends Controller
                             ->where('id', $detailData['id'])
                             ->first();
 
+                        abort_unless($practiceDetail, 422, '練習メニューが見つかりません。');
                         if ($practiceDetail) {
 
                             $practiceDetail->update($data);
+                            PracticeVideos::attach($practiceDetail, $detailData['video_url'] ?? [], $targetPlayerId);
 
                             $submittedDetailIds[] = $practiceDetail->id;
                         }
@@ -275,6 +293,7 @@ class PracticeController extends Controller
                         $practiceDetail = $practice->details()
                             ->create($data);
 
+                        PracticeVideos::attach($practiceDetail, $detailData['video_url'] ?? [], $targetPlayerId);
                         $submittedDetailIds[] = $practiceDetail->id;
                     }
                 }
@@ -311,7 +330,10 @@ class PracticeController extends Controller
             ->where('user_id', $targetPlayerId)
             ->firstOrFail();
 
-        $practice->delete();
+        DB::transaction(function () use ($practice) {
+            $practice->details()->delete();
+            $practice->delete();
+        });
 
         return redirect()
             ->route('practices.index')

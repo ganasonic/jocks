@@ -11,6 +11,10 @@
 
     <form action="{{ route('practices.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="player_id" value="{{ auth()->user()->targetPlayerId() }}">
+        @if($errors->any())
+            <div class="alert alert-danger"><ul class="mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+        @endif
 
         <div class="card shadow-sm border-light-subtle mb-4">
             <div class="card-body p-4">
@@ -54,60 +58,15 @@
         </div>
 
         <h3 class="h5 fw-bold mb-3">練習メニュー</h3>
+        @php($detailRows = old('details', [['menu_name' => '']]))
         <div id="details-container">
-            <div class="card shadow-sm border-light-subtle mb-3 detail-item">
-                <div class="card-body p-3">
-                    <div class="row g-2 mb-2">
-                        <div class="col-md-4">
-                            <label class="form-label fs-7 fw-bold">メニュー名 <span class="text-danger">*</span></label>
-                            <input type="text" name="details[0][menu_name]" class="form-control form-control-sm" list="menu-options" placeholder="直接入力または選択" required autocomplete="off">
-                            <datalist id="menu-options">
-                                <option value="フラット"><option value="ライン取り"><option value="ポジション"><option value="フラット・カービング"><option value="スピード"><option value="コーク720"><option value="フルツイスト"><option value="グラブ練習">
-                            </datalist>
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="form-label fs-7 fw-bold">本数/時間</label>
-                            <select name="details[0][runs_or_time]" class="form-select form-select-sm">
-                                <option value="">選択</option>
-                                @foreach(['1本', '3本', '5本', '10本', '15本', '20本', '5分', '10分', '15分', '20分', '30分', '60分'] as $val)
-                                    <option value="{{ $val }}">{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fs-7 fw-bold">本人達成度</label>
-                            <select name="details[0][rating]" class="form-select form-select-sm">
-                                <option value="">選択なし</option>
-                                @for($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}">{{ $i }} ({{ str_repeat('★', $i) }})</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fs-7 fw-bold text-primary">コーチ達成度</label>
-                            <select name="details[0][coach_rating]" class="form-select form-select-sm border-primary">
-                                <option value="">選択なし</option>
-                                @for($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}">{{ $i }} ({{ str_repeat('★', $i) }})</option>
-                                @endfor
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row g-2 mb-2">
-                        <div class="col-md-6"><label class="form-label fs-7">感触・自己評価</label><textarea name="details[0][impression]" class="form-control form-control-sm" rows="2"></textarea></div>
-                        <div class="col-md-6"><label class="form-label fs-7">課題・反省</label><textarea name="details[0][notice]" class="form-control form-control-sm" rows="2"></textarea></div>
-                    </div>
-
-                    <div class="row g-2">
-                        <div class="col-md-8"><label class="form-label fs-7 text-success fw-bold">アドバイス（コーチコメント）</label><textarea name="details[0][feedback]" class="form-control form-control-sm border-success-subtle bg-success-subtle bg-opacity-10" rows="2"></textarea></div>
-                        <div class="col-md-4"><label class="form-label fs-7">動画URL</label><input type="url" name="details[0][video_url]" class="form-control form-control-sm" placeholder="https://..."></div>
-                    </div>
-                </div>
-            </div>
+            @foreach($detailRows as $index => $row)
+                @include('practices.partials.detail-form', ['index' => $index, 'row' => $row])
+            @endforeach
         </div>
+        <template id="detail-template">
+            @include('practices.partials.detail-form', ['index' => '__INDEX__', 'row' => []])
+        </template>
 
         <button type="button" id="add-detail-btn" class="btn btn-outline-primary fw-bold mb-4">＋ メニュー追加</button>
 
@@ -117,17 +76,5 @@
     </form>
 </div>
 
-<script>
-    let detailIndex = 1;
-    document.getElementById('add-detail-btn').addEventListener('click', function() {
-        const container = document.getElementById('details-container');
-        const template = container.firstElementChild.cloneNode(true);
-        template.querySelectorAll('input, textarea, select').forEach(el => {
-            el.name = el.name.replace(/details\[\d+\]/, `details[${detailIndex}]`);
-            el.value = '';
-        });
-        container.appendChild(template);
-        detailIndex++;
-    });
-</script>
+@include('practices.partials.upload-script')
 @endsection
